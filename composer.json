@@ -1,0 +1,24 @@
+{
+    "name": "pjpawel/light-api",
+    "type": "framework",
+    "description": "LigthApi is very fast framework that doesn't affect your architecture",
+    "authors": [
+        {
+            "name": "pjpawel",
+            "email": "pawel.jan.podgorski@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "pjpawel\\LightApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "pjpawel\\LightApi\\Test\\": "test/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}
