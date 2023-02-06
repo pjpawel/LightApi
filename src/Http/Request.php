@@ -14,7 +14,7 @@ class Request
     public ValuesBag $server;
     public ValuesBag $files;
     public ValuesBag $cookies;
-    public string $content;
+    public ?string $content;
 
     public function __construct(
         array $query = [],
