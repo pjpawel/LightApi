@@ -22,8 +22,6 @@ class CliRunner implements RunnerInterface
      */
     public function run(): void
     {
-        $command = $this->kernel->getCommand($this->commandName);
-        $command->prepare();
-        $this->result = $command->execute();
+        $this->result = $this->kernel->handleCommand($this->commandName);
     }
 }
