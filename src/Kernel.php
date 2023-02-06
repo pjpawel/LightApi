@@ -2,9 +2,9 @@
 
 namespace pjpawel\LightApi;
 
-use Exception;
 use pjpawel\LightApi\Command\Command;
 use pjpawel\LightApi\Command\CommandLoader;
+use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
@@ -16,84 +16,61 @@ class Kernel
     public const VERSION_MINOR = 1;
     public const VERSION_PATCH = 0;
 
-    public const ENVS = [
-        'dev',
-        'test',
-        'prod'
-    ];
-
-    public const REQUIRED_CONFIG_PARAMS = [
-        'env',
-        
-    ];
-
+    /**
+     * @var string project directory
+     */
+    public string $projectDir;
     public string $env;
-    private Request $request;
-    private bool $arePathsLoaded = false;
+    public bool $debug;
     private EndpointsLoader $endpointsLoader;
-    private bool $areCommandsLoaded = false;
     private CommandLoader $commandLoader;
+    private ContainerLoader $containerLoader;
 
 
-    public function __construct(array $config = [])
+    public function __construct(array $config)
     {
-        $this->loadConfig($config);
-        $this->boot();
+        $this->projectDir = $config['projectDir'];
+        $this->env = $config['env'];
+        $this->debug = $config['debug'];
         $this->endpointsLoader = new EndpointsLoader($config['controllers']);
         $this->commandLoader = new CommandLoader($config['commands']);
+        $this->boot($config);
     }
 
-    private function loadEnv(string $env): void
+    public function boot(array $config): void
     {
-        if (!in_array($env, self::ENVS)) {
-            $this->env = $env;
-        }
+        //Get dependency Injection
+        $this->containerLoader = new ContainerLoader($config['container']);
     }
 
     /**
-     * @param array $config
-     * @throws Exception
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
      */
-    private function loadConfig(array $config): void
-    {
-        foreach ($config as $key => $value) {
-            switch ($key) {
-                case 'env':
-                    $this->loadEnv($value);
-                    break;
-                default:
-                    throw new Exception("Config key $key is invalid or not supported");
-            }
-        }
-    }
-
-    public function boot(): void
-    {
-        //Get dependency Injection
-    }
-
     public function handleRequest(Request $request): Response
     {
-        if ($this->arePathsLoaded === false) {
+        if ($this->endpointsLoader->loaded === false) {
             $this->endpointsLoader->load();
         }
         $request->validateIp();
-        $endpoint = $this->endpointsLoader->getPath($request->path);
-        $endpoint->load();
-        return $endpoint->execute();
+        $endpoint = $this->endpointsLoader->getEndpoint($request);
+        $this->containerLoader->add(['class' => Request::class, 'args' => [], 'object' => $request]);
+        return $endpoint->execute($this->containerLoader, $request);
     }
 
-    public function getCommand(string $commandName): Command
+    /**
+     * @param string $commandName
+     * @return int
+     */
+    public function handleCommand(string $commandName): int
     {
-        if ($this->areCommandsLoaded === false) {
+        if ($this->commandLoader->loaded === false) {
             $this->commandLoader->load();
         }
-        return $this->commandLoader->getCommand($commandName);
-    }
-
-    private function loadCommands(): void
-    {
-        
+        $command = $this->commandLoader->getCommand($commandName);
+        $command->prepare();
+        return $command->execute();
     }
 
 
