@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Http\Exception;
 
-class MethodNotAllowedException extends HttpException
+class MethodNotAllowedHttpException extends HttpException
 {
     protected const CODE = 405;
 }
