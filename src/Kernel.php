@@ -39,7 +39,6 @@ class Kernel
 
     public function boot(array $config): void
     {
-        //Get dependency Injection
         $this->containerLoader = new ContainerLoader($config['container']);
     }
 
@@ -51,7 +50,7 @@ class Kernel
     public function handleRequest(Request $request): Response
     {
         if ($this->endpointsLoader->loaded === false) {
-            $this->endpointsLoader->load();
+            $this->endpointsLoader->load($this->projectDir);
         }
         $request->validateIp();
         $endpoint = $this->endpointsLoader->getEndpoint($request);
