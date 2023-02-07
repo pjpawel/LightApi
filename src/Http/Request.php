@@ -2,6 +2,8 @@
 
 namespace pjpawel\LightApi\Http;
 
+use pjpawel\LightApi\Http\Exception\ForbiddenHttpException;
+
 class Request
 {
 
@@ -43,13 +45,18 @@ class Request
         return new static($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
     }
 
+    /**
+     * @param array $trustedIPs
+     * @return void
+     * @throws ForbiddenHttpException
+     */
     public function validateIp(array $trustedIPs = []): void
     {
         if (empty($trustedIPs)) {
             return;
         }
         if (!in_array($this->ip, $trustedIPs)) {
-            throw new \Exception();
+            throw new ForbiddenHttpException();
         }
     }
 }

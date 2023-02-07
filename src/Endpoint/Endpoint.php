@@ -3,10 +3,12 @@
 namespace pjpawel\LightApi\Endpoint;
 
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Http\JsonResponse;
+use pjpawel\LightApi\Http\Exception\HttpException;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
+use pjpawel\LightApi\Http\ResponseStatus;
 use pjpawel\LightApi\Kernel\KernelException;
+use pjpawel\LightApi\Kernel\ProgrammerException;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -58,17 +60,17 @@ class Endpoint
                     } elseif ($parameterTypeName == 'int') {
                         $this->regexPath = str_replace('{' . $pathParameters[$parameterIndex] . '}', '(\d+)', $this->regexPath);
                     } else {
-                        throw new \Exception('Not supported builtin type for parameter');
+                        throw new ProgrammerException(sprintf('Not supported builtin type %s for parameter %s', $parameterTypeName, $parameter->getName()));
                     }
                     //$this->pathParams[] = $pathParameters[$parameterIndex];
                     unset($pathParameters[$parameterIndex]);
                 } else {
-                    throw new \Exception('Invalid parameter type');
+                    throw new ProgrammerException('Invalid parameter type ' . $parameterType->getName());
                 }
             }
         }
         if (!empty($pathParameters)) {
-            throw new \Exception('Missing value for :' . implode(', ', $pathParameters));
+            throw new ProgrammerException('Missing value for :' . implode(', ', $pathParameters));
         }
     }
 
@@ -82,26 +84,32 @@ class Endpoint
      */
     public function execute(ContainerLoader $container, Request $request): Response
     {
-        $reflectionClass = new ReflectionClass($this->className);
-        $constructor = $reflectionClass->getConstructor();
-        $constructorArgs = [];
-        if ($constructor != null) {
-            $constructorArgs = $this->loadArguments($constructor->getParameters(), $container, $request, false);
-        }
-        $class = $reflectionClass->newInstanceArgs($constructorArgs);
+        try {
+            $reflectionClass = new ReflectionClass($this->className);
+            $constructor = $reflectionClass->getConstructor();
+            $constructorArgs = [];
+            if ($constructor != null) {
+                $constructorArgs = $this->loadArguments($constructor->getParameters(), $container, $request, false);
+            }
+            $class = $reflectionClass->newInstanceArgs($constructorArgs);
 
-        $reflectionMethod = $reflectionClass->getMethod($this->methodName);
-        $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request, true);
+            $reflectionMethod = $reflectionClass->getMethod($this->methodName);
+            $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request, true);
 
-        $result = $reflectionMethod->invokeArgs($class, $args);
-        if ($result instanceof Response) {
-            return $result;
-        } elseif (is_array($result)) {
-            return new JsonResponse($result);
-        } elseif (is_string($result)) {
-            return new Response($result);
-        } else {
-            throw new \Exception('Invalid object type');
+            $result = $reflectionMethod->invokeArgs($class, $args);
+            if ($result instanceof Response) {
+                return $result;
+            } elseif (is_array($result)) {
+                return new Response($result);
+            } elseif (is_string($result)) {
+                return new Response($result);
+            } else {
+                throw new ProgrammerException('Invalid object type of response: ' . var_export($result, true));
+            }
+        } catch (HttpException $httpExc) {
+            return new Response($httpExc->getMessage(), ResponseStatus::from($httpExc->getCode()));
+        } catch (\Exception $exc) {
+            return new Response('Internal server error occurred', ResponseStatus::INTERNAL_SERVER_ERROR);
         }
     }
 

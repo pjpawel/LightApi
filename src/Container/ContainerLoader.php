@@ -2,6 +2,7 @@
 
 namespace pjpawel\LightApi\Container;
 
+use pjpawel\LightApi\Kernel\ProgrammerException;
 use Psr\Container\ContainerInterface;
 use pjpawel\LightApi\Container\ContainerNotFoundException;
 use ReflectionClass;
@@ -37,7 +38,7 @@ class ContainerLoader implements ContainerInterface
             } elseif (interface_exists($name)) {
                 $this->definitions[$name] = new InterfaceDefinition($name, $value);
             } else {
-                throw new \Exception('Invalid container definition for name ' . $name);
+                throw new ProgrammerException('Invalid container definition for name ' . $name);
             }
         }
         $this->definitions['container'] = new ClassDefinition('container', []);
@@ -52,9 +53,9 @@ class ContainerLoader implements ContainerInterface
      */
     public function add(array $definition): void
     {
-        $definition = new ClassDefinition($definition['name'], $definition['args']);
-        $definition->object = $definition['object'] ?? null;
-        $this->definitions[$definition['class']] = $definition;
+        $newDefinition = new ClassDefinition($definition['name'], $definition['args'] ?? []);
+        $newDefinition->object = $definition['object'] ?? null;
+        $this->definitions[$definition['class']] = $newDefinition;
     }
 
     /**

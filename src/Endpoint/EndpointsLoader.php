@@ -2,9 +2,10 @@
 
 namespace pjpawel\LightApi\Endpoint;
 
-use pjpawel\LightApi\Http\Exception\MethodNotAllowedException;
+use pjpawel\LightApi\Http\Exception\MethodNotAllowedHttpException;
 use pjpawel\LightApi\Http\Exception\NotFoundHttpException;
 use pjpawel\LightApi\Http\Request;
+use pjpawel\LightApi\Kernel\ProgrammerException;
 use ReflectionClass;
 
 class EndpointsLoader
@@ -29,6 +30,7 @@ class EndpointsLoader
      * @param string $projectDir
      * @return void
      * @throws \ReflectionException
+     * @throws ProgrammerException
      */
     public function load(string $projectDir): void
     {
@@ -44,7 +46,7 @@ class EndpointsLoader
                     }
                 }
             } else {
-                throw new \Exception('Invalid controller path');
+                throw new ProgrammerException('Invalid controller path');
             }
         }
         $this->loaded = true;
@@ -73,7 +75,7 @@ class EndpointsLoader
      * @param Request $request
      * @return Endpoint
      * @throws NotFoundHttpException
-     * @throws MethodNotAllowedException
+     * @throws MethodNotAllowedHttpException
      */
     public function getEndpoint(Request $request): Endpoint
     {
@@ -89,7 +91,7 @@ class EndpointsLoader
             }
         }
         if (!isset($matchedEndpoint)) {
-            throw $methodNotAllowed ? new MethodNotAllowedException() : new NotFoundHttpException();
+            throw $methodNotAllowed ? new MethodNotAllowedHttpException() : new NotFoundHttpException();
         }
         return $matchedEndpoint;
     }
