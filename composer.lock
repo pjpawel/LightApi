@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb56511658aef6e98f212e2d85379bbd",
+    "content-hash": "c5f2b4cb42015343f493da50d2b28bcf",
     "packages": [
+        {
+            "name": "gnugat/nomo-spaco",
+            "version": "v0.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gnugat/nomo-spaco.git",
+                "reference": "b4485a25ef76d42d0ac12b1b2f2844eafe92ad48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gnugat/nomo-spaco/zipball/b4485a25ef76d42d0ac12b1b2f2844eafe92ad48",
+                "reference": "b4485a25ef76d42d0ac12b1b2f2844eafe92ad48",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "~2.0"
+            },
+            "bin": [
+                "bin/nomo-spaco"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Gnugat\\NomoSpaco\\": "src/Gnugat/NomoSpaco"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Loïc Chardonnet",
+                    "email": "loic.chardonnet@gmail.com",
+                    "homepage": "http://gnugat.github.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Displays the declared fully qualified classnames of a project",
+            "keywords": [
+                "available",
+                "detect",
+                "fully qualified classname"
+            ],
+            "support": {
+                "issues": "https://github.com/gnugat/nomo-spaco/issues",
+                "source": "https://github.com/gnugat/nomo-spaco/tree/master"
+            },
+            "time": "2018-07-20T12:50:45+00:00"
+        },
         {
             "name": "psr/container",
             "version": "2.0.2",
@@ -359,16 +412,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.14",
+            "version": "1.9.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58"
+                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e5fcc96289cf737304286a9b505fbed091f02e58",
-                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/922e2689bb180575d0f57de0443c431a5a698e8f",
+                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f",
                 "shasum": ""
             },
             "require": {
@@ -398,7 +451,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.14"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.16"
             },
             "funding": [
                 {
@@ -414,7 +467,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-19T10:47:09+00:00"
+            "time": "2023-02-07T10:42:21+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
