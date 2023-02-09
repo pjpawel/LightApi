@@ -53,7 +53,7 @@ class EndpointsLoaderTest extends TestCase
         $method = $reflectionClass->getMethod('loadEndpointClass');
         $method->invoke($loader, ControllerOne::class);
         $this->assertNotEmpty($loader->endpoints);
-        $this->assertCount(4, $loader->endpoints);
+        $this->assertCount(5, $loader->endpoints);
     }
 
     /**
