@@ -5,9 +5,9 @@ namespace pjpawel\LightApi\Http;
 class HeadersBag extends ValuesBag
 {
 
-    public function add(string $key, mixed $value): void
+    public function add(string $key, string $value): void
     {
-        //TODO
+        $this->parameters[$key] = $value;
     }
 
 }
