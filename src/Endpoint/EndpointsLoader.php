@@ -73,7 +73,7 @@ class EndpointsLoader
             if (!empty($attributes)) {
                 $attribute = $attributes[0];
                 $arguments = $attribute->getArguments();
-                $endpoint = new Endpoint($class, $method, $arguments[0], $arguments[1] ?? []);
+                $endpoint = new Endpoint($class, $method->getName(), $arguments[0], $arguments[1] ?? []);
                 $endpoint->makeRegexPath();
                 $this->endpoints[] = $endpoint;
             }
