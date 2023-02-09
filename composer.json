@@ -29,7 +29,7 @@
         "phpstan/phpstan": "^1.9"
     },
     "scripts": {
-        "unit": "vendor/bin/phpunit test\\",
+        "unit": "vendor/bin/phpunit .",
         "stan": "vendor/bin/phpstan analyse",
         "all": [
             "@unit",
