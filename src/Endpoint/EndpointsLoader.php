@@ -40,6 +40,9 @@ class EndpointsLoader
     {
         $classFinder = new ClassFinder();
         foreach ($this->controllerPaths as $controllerPath => $controllerNamespaces) {
+            if (!is_array($controllerNamespaces)) {
+                throw new ProgrammerException('ControllerNamespaces should be in array');
+            }
             $controllerPath = $projectDir . DIRECTORY_SEPARATOR . $controllerPath;
             if (is_dir($controllerPath)) {
                 $allClasses = $classFinder->getAllClassInDir($controllerPath);
