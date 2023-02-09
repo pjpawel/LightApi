@@ -25,11 +25,13 @@ class KernelDebugger
         $endpointsLoaderReflection = $reflectionKernel->getProperty('endpointsLoader');
         /** @var EndpointsLoader $endpointsLoader */
         $endpointsLoader = $endpointsLoaderReflection->getValue($this->kernel);
+        $endpointsLoader->load($this->kernel->projectDir);
         var_dump($endpointsLoader->serialize());
 
         $commandLoaderReflection = $reflectionKernel->getProperty('commandLoader');
         /** @var CommandLoader $commandLoader */
         $commandLoader = $commandLoaderReflection->getValue($this->kernel);
+        $commandLoader->load();
         var_dump($commandLoader->command);
 
         $containerLoaderReflection = $reflectionKernel->getProperty('containerLoader');
