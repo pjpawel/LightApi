@@ -19,7 +19,7 @@ class Endpoint
     private string $methodName;
     public string $path;
     public array $httpMethods;
-    public string $regexPath;
+    public ?string $regexPath = null;
 
     public function __construct(string $className, string $methodName, string $path, array $httpMethods)
     {
@@ -27,7 +27,6 @@ class Endpoint
         $this->methodName = $methodName;
         $this->path = $path;
         $this->httpMethods = $httpMethods;
-        $this->makeRegexPath();
     }
 
     /**
@@ -35,7 +34,7 @@ class Endpoint
      * @throws \ReflectionException
      * @throws \Exception
      */
-    private function makeRegexPath(): void
+    public function makeRegexPath(): void
     {
         $this->regexPath = $this->path;
         preg_match_all('/\{\w+\}/', $this->path, $pathParameters, PREG_SET_ORDER);
@@ -151,5 +150,23 @@ class Endpoint
             }
         }
         return $args;
+    }
+
+    public function serialize(): array
+    {
+        return [
+            $this->className,
+            $this->methodName,
+            $this->path,
+            $this->httpMethods,
+            $this->regexPath
+        ];
+    }
+
+    public static function unserialize(array $data): self
+    {
+        $self = new self($data[0], $data[1], $data[2], $data[4]);
+        $self->regexPath = $data[5];
+        return $self;
     }
 }

@@ -62,11 +62,13 @@ class EndpointsLoader
         $reflectionClass = new ReflectionClass($class);
         $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
-            $attributes = $method->getAttributes(Route::class);
+            $attributes = $method->getAttributes(AsRoute::class);
             if (!empty($attributes)) {
                 $attribute = $attributes[0];
                 $arguments = $attribute->getArguments();
-                $this->endpoints[] = new Endpoint($class, $method, $arguments[0], $arguments[1] ?? []);
+                $endpoint = new Endpoint($class, $method, $arguments[0], $arguments[1] ?? []);
+                $endpoint->makeRegexPath();
+                $this->endpoints[] = $endpoint;
             }
         }
     }
@@ -94,6 +96,25 @@ class EndpointsLoader
             throw $methodNotAllowed ? new MethodNotAllowedHttpException() : new NotFoundHttpException();
         }
         return $matchedEndpoint;
+    }
+
+    public function serialize(): array
+    {
+        $data = [];
+        foreach ($this->endpoints as $endpoint) {
+            $data[] = $endpoint->serialize();
+        }
+        return $data;
+    }
+
+    public static function unserialize(array $config): self
+    {
+        $self = new self([]);
+        foreach ($config as $endpointData) {
+            $self->endpoints[] = Endpoint::unserialize($endpointData);
+        }
+        $self->loaded = true;
+        return $self;
     }
 
 }

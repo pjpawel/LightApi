@@ -8,7 +8,7 @@ use Attribute;
  * Class is to be used as attribute to expose methods as routes to kernel
  */
 #[Attribute(Attribute::TARGET_FUNCTION|Attribute::TARGET_METHOD)]
-class Route
+class AsRoute
 {
 
     public string $path;

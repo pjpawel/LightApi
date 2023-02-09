@@ -8,10 +8,10 @@ class CliRunner implements RunnerInterface
 {
 
     private Kernel $kernel;
-    public string $commandName;
+    public ?string $commandName;
     public int $result;
 
-    public function __construct(Kernel $kernel, string $commandName)
+    public function __construct(Kernel $kernel, ?string $commandName = null)
     {
         $this->kernel = $kernel;
         $this->commandName = $commandName;
