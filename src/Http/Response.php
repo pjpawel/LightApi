@@ -47,6 +47,10 @@ class Response
             return;
         }
 
+        foreach ($this->headers->parameters as $key => $value) {
+            header($key.': '.$value, true, $this->status->value);
+        }
+
         /*foreach ($this->headers->allPreserveCaseWithoutCookies() as $name => $values) {
             //TODO: change
             $replace = 0 === strcasecmp($name, 'Content-Type');
