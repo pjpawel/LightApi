@@ -58,7 +58,7 @@ class Kernel
         } catch (Exception $e) {
             return $this->endpointsLoader->getErrorResponse($e);
         }
-        $this->containerLoader->add(['class' => Request::class, 'args' => [], 'object' => $request]);
+        $this->containerLoader->add(['name' => Request::class, 'args' => [], 'object' => $request]);
         return $endpoint->execute($this->containerLoader, $request);
     }
 
