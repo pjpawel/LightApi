@@ -10,6 +10,9 @@ class Command
 
     }
 
+    /**
+     * @phpstan-i
+     */
     public function execute(): int
     {
 

@@ -4,9 +4,11 @@ namespace pjpawel\LightApi\Http;
 
 use pjpawel\LightApi\Http\Exception\ForbiddenHttpException;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Request
 {
-
     public string $ip;
     public string $path;
     public string $method;

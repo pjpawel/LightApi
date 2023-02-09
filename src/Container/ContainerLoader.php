@@ -103,7 +103,7 @@ class ContainerLoader implements ContainerInterface
             $this->definitions[$id]->object = (new ReflectionClass($definition->name))
                 ->newInstanceArgs($definition->arguments);
         } else {
-            /** @var $definition InDirectDefinition */
+            /** @var InDirectDefinition $definition */
             $this->definitions[$id]->object = $this->get($definition->className);
         }
     }

@@ -51,6 +51,7 @@ class Endpoint
         $reflectionMethod = (new ReflectionClass($this->className))->getMethod($this->methodName);
         foreach ($reflectionMethod->getParameters() as $parameter) {
             if (($parameterIndex = array_search($parameter->getName(), $pathParameters, true)) !== false) {
+                /** @var \ReflectionNamedType $parameterType */
                 $parameterType = $parameter->getType();
                 if ($parameterType->isBuiltin()) {
                     $parameterTypeName = $parameterType->getName();
@@ -131,6 +132,7 @@ class Endpoint
         $pathParameterIndex = 0;
         $args = [];
         foreach ($parameters as $parameter) {
+            /** @var ReflectionNamedType $type */
             $type = $parameter->getType();
             if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
                 if ($type->getName() == Request::class) {

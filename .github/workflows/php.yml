@@ -32,5 +32,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run test suite
+    - name: Run phpunit suite
       run: composer unit
+
+    - name: Run phpstan suite
+      run: composer stan
