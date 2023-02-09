@@ -55,7 +55,7 @@ class ContainerLoader implements ContainerInterface
     {
         $newDefinition = new ClassDefinition($definition['name'], $definition['args'] ?? []);
         $newDefinition->object = $definition['object'] ?? null;
-        $this->definitions[$definition['class']] = $newDefinition;
+        $this->definitions[$definition['name']] = $newDefinition;
     }
 
     /**
