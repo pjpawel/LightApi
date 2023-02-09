@@ -1,6 +1,7 @@
 {
     "name": "pjpawel/light-api",
     "type": "framework",
+    "license": "Apache-2.0",
     "description": "LigthApi is very fast framework that doesn't affect your architecture",
     "authors": [
         {
