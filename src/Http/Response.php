@@ -47,7 +47,7 @@ class Response
             return;
         }
 
-        foreach ($this->headers->allPreserveCaseWithoutCookies() as $name => $values) {
+        /*foreach ($this->headers->allPreserveCaseWithoutCookies() as $name => $values) {
             //TODO: change
             $replace = 0 === strcasecmp($name, 'Content-Type');
             foreach ($values as $value) {
@@ -58,7 +58,7 @@ class Response
         foreach ($this->headers->getCookies() as $cookie) {
             //TODO:
             header('Set-Cookie: '.$cookie, false, $this->status->value);
-        }
+        }*/
 
         // status
         header(sprintf('HTTP/%s %s %s', $this->version, $this->status->value, $this->status->getText()), true, $this->status->value);
