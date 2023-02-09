@@ -2,9 +2,13 @@
 
 namespace pjpawel\LightApi\Endpoint;
 
+use Exception;
+use pjpawel\LightApi\Http\Exception\HttpException;
 use pjpawel\LightApi\Http\Exception\MethodNotAllowedHttpException;
 use pjpawel\LightApi\Http\Exception\NotFoundHttpException;
 use pjpawel\LightApi\Http\Request;
+use pjpawel\LightApi\Http\Response;
+use pjpawel\LightApi\Http\ResponseStatus;
 use pjpawel\LightApi\Kernel\ProgrammerException;
 use ReflectionClass;
 
@@ -96,6 +100,15 @@ class EndpointsLoader
             throw $methodNotAllowed ? new MethodNotAllowedHttpException() : new NotFoundHttpException();
         }
         return $matchedEndpoint;
+    }
+
+    public function getErrorResponse(Exception|HttpException $exception): Response
+    {
+        if ($exception instanceof HttpException) {
+            return new Response($exception->getMessage(), ResponseStatus::from($exception->getCode()));
+        } else {
+            return new Response('Internal server error occurred', ResponseStatus::INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function serialize(): array

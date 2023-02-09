@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi;
 
-use pjpawel\LightApi\Command\Command;
+use Exception;
 use pjpawel\LightApi\Command\CommandLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
@@ -45,7 +45,7 @@ class Kernel
     /**
      * @param Request $request
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function handleRequest(Request $request): Response
     {
@@ -53,7 +53,11 @@ class Kernel
             $this->endpointsLoader->load($this->projectDir);
         }
         $request->validateIp();
-        $endpoint = $this->endpointsLoader->getEndpoint($request);
+        try {
+            $endpoint = $this->endpointsLoader->getEndpoint($request);
+        } catch (Exception $e) {
+            return $this->endpointsLoader->getErrorResponse($e);
+        }
         $this->containerLoader->add(['class' => Request::class, 'args' => [], 'object' => $request]);
         return $endpoint->execute($this->containerLoader, $request);
     }
