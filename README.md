@@ -7,6 +7,7 @@
 *<b>Warning!</b> This framework is still in progress. Stay tuned!*
 
 ### What's left in TODO:
+- [ ] Logging
 - [ ] Session
 - [ ] Cache
 - [ ] Serializing
