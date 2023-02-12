@@ -15,6 +15,7 @@ class Kernel
     public const VERSION_MAJOR = 0;
     public const VERSION_MINOR = 1;
     public const VERSION_PATCH = 0;
+    private const SERIALIZE_FILE_NAME = 'kernel-serialize.php';
 
     /**
      * @var string project directory
@@ -32,13 +33,14 @@ class Kernel
         $this->projectDir = $config['projectDir'];
         $this->env = $config['env'];
         $this->debug = $config['debug'];
-        $this->endpointsLoader = new EndpointsLoader($config['controllers']);
-        $this->commandLoader = new CommandLoader($config['commands']);
         $this->boot($config);
     }
 
     public function boot(array $config): void
     {
+
+        $this->endpointsLoader = new EndpointsLoader($config['controllers']);
+        $this->commandLoader = new CommandLoader($config['commands']);
         $this->containerLoader = new ContainerLoader($config['container']);
     }
 
