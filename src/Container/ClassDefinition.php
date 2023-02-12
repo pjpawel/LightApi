@@ -5,6 +5,7 @@ namespace pjpawel\LightApi\Container;
 class ClassDefinition extends Definition
 {
 
+    public string $name;
     /**
      * @var string[]
      */

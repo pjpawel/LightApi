@@ -4,11 +4,11 @@ namespace pjpawel\LightApi\Container;
 
 use pjpawel\LightApi\Kernel\ProgrammerException;
 use Psr\Container\ContainerInterface;
-use pjpawel\LightApi\Container\ContainerNotFoundException;
-use ReflectionClass;
 
 class ContainerLoader implements ContainerInterface
 {
+
+    use ContainerTrait;
 
     /**
      * @var array<string, Definition>
@@ -59,54 +59,35 @@ class ContainerLoader implements ContainerInterface
     }
 
     /**
-     * @param string $id
-     * @return object
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \ReflectionException
+     * @param Definition[] $definitions
+     * @return void
+     */
+    public function addDefinitions(array $definitions): void
+    {
+        foreach ($definitions as $definition) {
+            $this->definitions[] = $definition;
+        }
+    }
+
+    /**
+     * @param string[] $ids
+     * @return Definition[]
      * @throws \pjpawel\LightApi\Container\ContainerNotFoundException
      */
-    public function get(string $id): object
+    public function getDefinitions(array $ids): array
     {
-        if (!isset($this->definitions[$id])) {
-            throw new ContainerNotFoundException();
+        /** @var Definition[] $definitions */
+        $definitions = [];
+        foreach ($ids as $id) {
+            if (!isset($this->definitions[$id])) {
+                throw new ContainerNotFoundException();
+            }
+            $definitions[] = $this->definitions[$id];
         }
-        if ($this->definitions[$id]->object === null) {
-            $this->loadObject($id);
-        }
-        return $this->definitions[$id]->object;
+        return $definitions;
     }
 
-    /**
-     * @param string $id
-     * @return bool
-     */
-    public function has(string $id): bool
-    {
-        if (!isset($this->definitions[$id])) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
-    /**
-     * @param string $id
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \ReflectionException
-     */
-    protected function loadObject(string $id): void
-    {
-        $definition = $this->definitions[$id];
-        if ($definition instanceof ClassDefinition) {
-            $this->definitions[$id]->object = (new ReflectionClass($definition->name))
-                ->newInstanceArgs($definition->arguments);
-        } else {
-            /** @var InDirectDefinition $definition */
-            $this->definitions[$id]->object = $this->get($definition->className);
-        }
-    }
 
 
 }
