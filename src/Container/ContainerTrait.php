@@ -9,7 +9,7 @@ trait ContainerTrait
     /**
      * @var Definition[]
      */
-    public array $definition;
+    public array $definitions;
 
     /**
      * @param string $id

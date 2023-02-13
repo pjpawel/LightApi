@@ -132,5 +132,4 @@ class EndpointsLoader
         $self->loaded = true;
         return $self;
     }
-
 }
