@@ -38,7 +38,7 @@ class Endpoint
     {
         $this->regexPath = $this->path;
         preg_match_all('/\{\w+\}/', $this->path, $pathParameters, PREG_SET_ORDER);
-        $this->regexPath = '/^' . str_replace('/', '\\/', $this->regexPath) . '/';
+        $this->regexPath = '/^' . str_replace('/', '\\/', $this->regexPath) . '$/';
         if (empty($pathParameters)) {
             return;
         }

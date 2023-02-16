@@ -24,7 +24,7 @@ class EndpointTest extends TestCase
         $this->assertEquals('/index', $endpoint->path);
         $this->assertEquals([], $endpoint->httpMethods);
         $endpoint->makeRegexPath();
-        $this->assertEquals('/^\/index/', $endpoint->regexPath);
+        $this->assertEquals('/^\/index$/', $endpoint->regexPath);
     }
 
     /**
@@ -36,7 +36,7 @@ class EndpointTest extends TestCase
         $this->assertEquals('/echo/{identifier}', $endpoint->path);
         $this->assertEquals(['POST'], $endpoint->httpMethods);
         $endpoint->makeRegexPath();
-        $this->assertEquals('/^\/echo\/(\w+)/', $endpoint->regexPath);
+        $this->assertEquals('/^\/echo\/(\w+)$/', $endpoint->regexPath);
     }
 
     /**
@@ -48,7 +48,7 @@ class EndpointTest extends TestCase
         $this->assertEquals('/echo/{identifierInt}', $endpoint->path);
         $this->assertEquals(['GET'], $endpoint->httpMethods);
         $endpoint->makeRegexPath();
-        $this->assertEquals('/^\/echo\/(\d+)/', $endpoint->regexPath);
+        $this->assertEquals('/^\/echo\/(\d+)$/', $endpoint->regexPath);
     }
 
     /**
@@ -60,7 +60,7 @@ class EndpointTest extends TestCase
         $this->assertEquals('/echo/{channel}/list/{identifier}', $endpoint->path);
         $this->assertEquals(['POST', 'PUT'], $endpoint->httpMethods);
         $endpoint->makeRegexPath();
-        $this->assertEquals('/^\/echo\/(\w+)\/list\/(\d+)/', $endpoint->regexPath);
+        $this->assertEquals('/^\/echo\/(\w+)\/list\/(\d+)$/', $endpoint->regexPath);
     }
 
     /**
