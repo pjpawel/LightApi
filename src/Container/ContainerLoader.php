@@ -59,13 +59,13 @@ class ContainerLoader implements ContainerInterface
     }
 
     /**
-     * @param Definition[] $definitions
+     * @param array<string,Definition> $definitions
      * @return void
      */
     public function addDefinitions(array $definitions): void
     {
-        foreach ($definitions as $definition) {
-            $this->definitions[] = $definition;
+        foreach ($definitions as $id => $definition) {
+            $this->definitions[$id] = $definition;
         }
     }
 
@@ -87,6 +87,23 @@ class ContainerLoader implements ContainerInterface
         return $definitions;
     }
 
+
+    public function serialize(): array
+    {
+        /*
+        $data = [];
+        foreach ($this->definitions as $name => $definition) {
+            $data[] = $definition->serialize();
+        }
+        return $data;
+        */
+        return [];
+    }
+
+    public static function unserialize(array $config): self
+    {
+        return new self($config);
+    }
 
 
 
