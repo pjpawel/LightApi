@@ -2,7 +2,13 @@
 
 namespace pjpawel\LightApi\Kernel;
 
-class ProgrammerException extends \Exception
+use Exception;
+
+/**
+ * This exception will be thrown
+ * when your configuration of application is wrong
+ */
+class ProgrammerException extends Exception
 {
 
 }
