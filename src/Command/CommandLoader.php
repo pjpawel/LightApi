@@ -36,4 +36,21 @@ class CommandLoader
         return new $this->command[$commandName]();
     }
 
+    public function serialize(): array
+    {
+        /*
+        $data = [];
+        foreach ($this->definitions as $name => $definition) {
+            $data[] = $definition->serialize();
+        }
+        return $data;
+        */
+        return [];
+    }
+
+    public static function unserialize(array $config): self
+    {
+        return new self($config);
+    }
+
 }
