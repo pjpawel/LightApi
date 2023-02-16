@@ -8,6 +8,7 @@ use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
+use Psr\Log\LoggerInterface;
 
 class Kernel
 {
@@ -23,9 +24,12 @@ class Kernel
     public string $projectDir;
     public string $env;
     public bool $debug;
+    private string $serializeConfigPath;
+    private bool $serializeAfter = false;
     private EndpointsLoader $endpointsLoader;
     private CommandLoader $commandLoader;
     private ContainerLoader $containerLoader;
+    //private LoggerInterface $kernelLogger;
 
 
     public function __construct(array $config)
@@ -38,10 +42,63 @@ class Kernel
 
     public function boot(array $config): void
     {
+        $this->serializeConfigPath = $this->projectDir . DIRECTORY_SEPARATOR .
+            ($config['serializeDir'] ?? 'var' . DIRECTORY_SEPARATOR . 'cache') .
+            DIRECTORY_SEPARATOR . self::SERIALIZE_FILE_NAME;
+        if (!$this->debug && !$this->hasSerializedFile()) {
+            try {
+                $this->makeLoadersFromSerialized();
+                $this->serializeAfter = true;
+                return;
+            } catch (Exception $e) {
+                error_log('Cannot load classes from serialized file');
+            }
+        }
+        $this->makeLoadersFromConfig($config);
+    }
 
+    /**
+     * @param array $config
+     * @return void
+     * @throws Exception
+     */
+    private function makeLoadersFromConfig(array $config): void
+    {
         $this->endpointsLoader = new EndpointsLoader($config['controllers']);
         $this->commandLoader = new CommandLoader($config['commands']);
         $this->containerLoader = new ContainerLoader($config['container']);
+    }
+
+    private function makeLoadersFromSerialized(): void
+    {
+        $serializedConfig = require $this->serializeConfigPath;
+        $this->endpointsLoader = EndpointsLoader::unserialize($serializedConfig['controllers']);
+        $this->commandLoader = CommandLoader::unserialize($serializedConfig['commands']);
+        $this->containerLoader = ContainerLoader::unserialize($serializedConfig['container']);
+    }
+
+    private function hasSerializedFile(): bool
+    {
+        if (is_file($this->serializeConfigPath)) {
+            return false;
+        }
+        return true;
+    }
+
+    protected function serialize(): void
+    {
+        $endpointSerialize = var_export($this->endpointsLoader->serialize(), true);
+        $commandSerialize = var_export($this->commandLoader->serialize(), true);
+        $containerSerialize = var_export($this->containerLoader->serialize(), true);
+        $serializeOutput = <<<EOL
+            <?php
+            return [
+                'endpoint' => $endpointSerialize,
+                'command => $commandSerialize,
+                'container' => $containerSerialize
+            ];
+            EOL;
+        file_put_contents($this->serializeConfigPath, $serializeOutput);
     }
 
     /**
@@ -65,17 +122,27 @@ class Kernel
     }
 
     /**
-     * @param string $commandName
+     * @param string|null $commandName
      * @return int
      */
-    public function handleCommand(string $commandName): int
+    public function handleCommand(?string $commandName = null): int
     {
         if ($this->commandLoader->loaded === false) {
             $this->commandLoader->load();
         }
-        $command = $this->commandLoader->getCommand($commandName);
-        $command->prepare();
-        return $command->execute();
+        /*if ($commandName === null){
+            $commandName = $this->commandLoader->getCommandNameFromServer();
+        }
+        $command = $this->commandLoader->getCommand($commandName, $this->containerLoader);
+        $command->prepare();*/
+        return 1;//$command->run();
+    }
+
+    public function __destruct()
+    {
+        if ($this->serializeAfter) {
+            $this->serialize();
+        }
     }
 
 
