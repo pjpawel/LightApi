@@ -3,3 +3,4 @@
 /performance_tests
 /.phpunit.cache
 .phpunit.result.cache
+/tmp
