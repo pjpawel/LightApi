@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Runner;
+namespace pjpawel\LightApi\Components\Runner;
 
 interface RunnerInterface
 {

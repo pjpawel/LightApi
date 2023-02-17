@@ -8,7 +8,6 @@ use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
-use Psr\Log\LoggerInterface;
 
 class Kernel
 {
