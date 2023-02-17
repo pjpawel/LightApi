@@ -4,7 +4,7 @@ namespace pjpawel\LightApi\Components\Logger;
 
 use pjpawel\LightApi\Components\Extension\Extension;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Kernel\ProgrammerException;
+use pjpawel\LightApi\Exception\ProgrammerException;
 
 class MonologExtension extends Extension
 {

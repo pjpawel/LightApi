@@ -16,7 +16,7 @@ class SimpleLogger implements LoggerInterface
     private string $logFilePath;
     private DateTimeZone $timeZone;
 
-    public function __construct(string $logFilePath, Level $logLevel)
+    public function __construct(string $logFilePath, Level $logLevel = Level::Info)
     {
         if (!is_file($logFilePath)) {
             $this->createLogFile($logFilePath);
@@ -31,7 +31,7 @@ class SimpleLogger implements LoggerInterface
      */
     private function createLogFile(string $filePath): void
     {
-        if (!file_put_contents($filePath, '')) {
+        if (!file_put_contents($filePath, 'Started logging...')) {
             throw new Exception('Cannot create log file');
         }
         chmod($filePath, 0777);

@@ -3,13 +3,13 @@
 namespace pjpawel\LightApi\Endpoint;
 
 use Exception;
+use pjpawel\LightApi\Exception\ProgrammerException;
 use pjpawel\LightApi\Http\Exception\HttpException;
 use pjpawel\LightApi\Http\Exception\MethodNotAllowedHttpException;
 use pjpawel\LightApi\Http\Exception\NotFoundHttpException;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Http\ResponseStatus;
-use pjpawel\LightApi\Kernel\ProgrammerException;
 use ReflectionClass;
 
 class EndpointsLoader

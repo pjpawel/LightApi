@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Container;
 
-use pjpawel\LightApi\Kernel\ProgrammerException;
+use pjpawel\LightApi\Exception\ProgrammerException;
 use Psr\Container\ContainerInterface;
 
 class ContainerLoader implements ContainerInterface
@@ -31,8 +31,8 @@ class ContainerLoader implements ContainerInterface
     private function createDefinitions(array $config): void
     {
         foreach ($config as $name => $value) {
-            if (str_starts_with($name, '@')) {
-                $this->definitions[$name] = new AliasDefinition($name, $value);
+            if (is_string($value) && str_starts_with($value, '@')) {
+                $this->definitions[$name] = new AliasDefinition($name, substr($value, 1));
             } elseif (class_exists($name)) {
                 $this->definitions[$name] = new ClassDefinition($name, $value);
             } elseif (interface_exists($name)) {

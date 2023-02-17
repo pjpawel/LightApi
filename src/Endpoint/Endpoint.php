@@ -3,12 +3,12 @@
 namespace pjpawel\LightApi\Endpoint;
 
 use pjpawel\LightApi\Container\ContainerLoader;
+use pjpawel\LightApi\Exception\KernelException;
+use pjpawel\LightApi\Exception\ProgrammerException;
 use pjpawel\LightApi\Http\Exception\HttpException;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Http\ResponseStatus;
-use pjpawel\LightApi\Kernel\KernelException;
-use pjpawel\LightApi\Kernel\ProgrammerException;
 use ReflectionClass;
 use ReflectionNamedType;
 
