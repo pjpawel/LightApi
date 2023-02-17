@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use pjpawel\LightApi\Debug\KernelDebugger;
+use pjpawel\LightApi\Components\Debug\KernelDebugger;
 use pjpawel\LightApi\Env;
 use pjpawel\LightApi\Kernel;
 
