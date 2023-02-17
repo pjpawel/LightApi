@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Components\Runner;
+namespace pjpawel\LightApi\Component\Runner;
 
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Kernel;

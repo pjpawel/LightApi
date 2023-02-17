@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Components\Logger;
+namespace pjpawel\LightApi\Component\Logger;
 
 use Monolog\Logger;
 use pjpawel\LightApi\Container\DefinedDefinition;

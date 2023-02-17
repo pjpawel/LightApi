@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Test\Container;
 
-use pjpawel\LightApi\Components\Logger\SimpleLogger\SimpleLogger;
+use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
 use pjpawel\LightApi\Container\AliasDefinition;
 use pjpawel\LightApi\Container\ClassDefinition;
 use pjpawel\LightApi\Container\ContainerLoader;

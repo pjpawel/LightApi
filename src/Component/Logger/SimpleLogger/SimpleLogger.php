@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Components\Logger\SimpleLogger;
+namespace pjpawel\LightApi\Component\Logger\SimpleLogger;
 
 use DateTime;
 use DateTimeZone;

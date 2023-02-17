@@ -1,8 +1,8 @@
 <?php
 
-namespace pjpawel\LightApi\Components\Logger;
+namespace pjpawel\LightApi\Component\Logger;
 
-use pjpawel\LightApi\Components\Extension\Extension;
+use pjpawel\LightApi\Component\Extension\Extension;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Exception\ProgrammerException;
 

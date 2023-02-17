@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Components\Debug;
+namespace pjpawel\LightApi\Component\Debug;
 
 use pjpawel\LightApi\Command\CommandLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
