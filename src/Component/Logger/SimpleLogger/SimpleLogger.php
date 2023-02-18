@@ -35,7 +35,7 @@ class SimpleLogger implements LoggerInterface
             return;
         }
         $dirname = dirname($filePath);
-        if (!is_dir($dirname) && !mkdir($dirname)) {
+        if (!is_dir($dirname) && !mkdir($dirname, 0777, true)) {
             throw new Exception('Cannot create log dir');
         }
         if (!file_put_contents($filePath, 'Started logging...' . PHP_EOL, FILE_APPEND)) {
