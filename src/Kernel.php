@@ -20,7 +20,7 @@ class Kernel
     public const VERSION_PATCH = 0;
     private const RUNTIME_DIR = 'var' . DIRECTORY_SEPARATOR;
     private const SERIALIZE_DEFAULT_DIR = self::RUNTIME_DIR . 'cache';
-    private const LOGGER_DEFAULT_DIR = self::RUNTIME_DIR . 'log';
+    private const LOGGER_DEFAULT_PATH = self::RUNTIME_DIR . 'log' . DIRECTORY_SEPARATOR . 'app.log';
     private const KERNEL_LOGGER_ALIASES = [
         'logger.kernel',
         'monolog.kernel',
@@ -120,7 +120,7 @@ class Kernel
                 return;
             } catch (Exception $e) {}
         }
-        $this->kernelLogger = new SimpleLogger($this->projectDir . DIRECTORY_SEPARATOR . self::LOGGER_DEFAULT_DIR);
+        $this->kernelLogger = new SimpleLogger($this->projectDir . DIRECTORY_SEPARATOR . self::LOGGER_DEFAULT_PATH);
     }
 
 
