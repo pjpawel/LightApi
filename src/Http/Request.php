@@ -3,6 +3,7 @@
 namespace pjpawel\LightApi\Http;
 
 use pjpawel\LightApi\Http\Exception\ForbiddenHttpException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @phpstan-consistent-constructor
@@ -60,5 +61,13 @@ class Request
         if (!in_array($this->ip, $trustedIPs)) {
             throw new ForbiddenHttpException();
         }
+    }
+
+    public function logRequest(LoggerInterface $logger): void
+    {
+        $logger->info(
+            sprintf('Requested path: %s, with %s method from ip: %s',
+                $this->path, $this->method, $this->ip)
+        );
     }
 }

@@ -75,6 +75,7 @@ class Kernel
         if ($this->endpointsLoader->loaded === false) {
             $this->endpointsLoader->load($this->projectDir);
         }
+        $request->logRequest($this->kernelLogger);
         $request->validateIp();
         try {
             $endpoint = $this->endpointsLoader->getEndpoint($request);
@@ -119,7 +120,7 @@ class Kernel
                 return;
             } catch (Exception $e) {}
         }
-        $this->kernelLogger = new SimpleLogger(self::LOGGER_DEFAULT_DIR);
+        $this->kernelLogger = new SimpleLogger($this->projectDir . DIRECTORY_SEPARATOR . self::LOGGER_DEFAULT_DIR);
     }
 
 
