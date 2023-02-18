@@ -13,6 +13,6 @@
 - [ ] Command and CommandLoader
 - [ ] Correct ContainerLoader and add ContainerTrait to inject services
 
-### Needed extension, not required:
+### Needed extension in future:
 - [ ] Session
 - [ ] Cache
