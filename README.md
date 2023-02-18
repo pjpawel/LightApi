@@ -7,10 +7,12 @@
 *<b>Warning!</b> This framework is still in progress. Stay tuned!*
 
 ### What's left in TODO:
-- [ ] Logging
-- [ ] Session
-- [ ] Cache
-- [ ] Serializing
+- [x] Logging
+- [x] Serializing
 - [ ] Add OpenAPI generator
 - [ ] Command and CommandLoader
 - [ ] Correct ContainerLoader and add ContainerTrait to inject services
+
+### Needed extension, not required:
+- [ ] Session
+- [ ] Cache

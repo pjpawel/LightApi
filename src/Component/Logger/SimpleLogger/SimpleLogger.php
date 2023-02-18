@@ -31,7 +31,14 @@ class SimpleLogger implements LoggerInterface
      */
     private function createLogFile(string $filePath): void
     {
-        if (!file_put_contents($filePath, 'Started logging...')) {
+        if (is_file($filePath)) {
+            return;
+        }
+        $dirname = dirname($filePath);
+        if (!is_dir($dirname) && !mkdir($dirname)) {
+            throw new Exception('Cannot create log dir');
+        }
+        if (!file_put_contents($filePath, 'Started logging...', FILE_APPEND)) {
             throw new Exception('Cannot create log file');
         }
         chmod($filePath, 0777);

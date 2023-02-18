@@ -1,5 +1,7 @@
 <?php
 
+use pjpawel\LightApi\Test\resources\classes\Logger;
+
 return [
     'projectDir' => realpath(__DIR__ . '/../../../../'),
     'trustedIPs' => [],
@@ -8,6 +10,6 @@ return [
     'components' => [
     ],
     'container' => [
-        \pjpawel\LightApi\Test\resources\classes\Logger::class => []
+        Logger::class => []
     ],
 ];
