@@ -6,4 +6,4 @@ parameters:
   excludePaths:
     - tests/resources/*
     - src/Command/*
-    - src/Components/Logger/MonologLoggerDefinition.php
+    - src/Component/Logger/MonologLoggerDefinition.php

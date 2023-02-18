@@ -49,6 +49,7 @@ class Kernel
             ($config['serializeDir'] ?? self::SERIALIZE_DEFAULT_DIR));
         $this->boot($config);
         $this->loadKernelLogger();
+        $this->kernelLogger->info('Kernel was loaded');
     }
 
     protected function boot(array $config): void

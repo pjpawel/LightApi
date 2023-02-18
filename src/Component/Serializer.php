@@ -34,7 +34,10 @@ class Serializer
             return false;
         }
         try {
-            $ini = ini_get('error_reporting') ?? -1;
+            $ini = ini_get('error_reporting');
+            if ($ini === false) {
+                $ini = -1;
+            }
             error_reporting(E_ERROR);
             $allSerializedObjects = file_get_contents($serializedFile);
             error_reporting($ini);
