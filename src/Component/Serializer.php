@@ -11,7 +11,7 @@ class Serializer
     private const SINGLE_FILE_NAME = 'serialized';
 
     private string $serializedDir;
-    private bool $serializeOnDestruct = false;
+    public bool $serializeOnDestruct = false;
     /**
      * @var array<string,object>
      */
@@ -66,9 +66,6 @@ class Serializer
      */
     public function makeSerialization(array $objects): void
     {
-        if (!$this->serializeOnDestruct) {
-            return;
-        }
         /** @var string[] $serializedObjects */
         $serializedObjects = [];
         foreach ($objects as $name => $object) {

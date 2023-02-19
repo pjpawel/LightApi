@@ -13,7 +13,7 @@ use pjpawel\LightApi\Test\resources\classes\Logger;
 class SerializerTest extends TestCase
 {
 
-    private const SERIALIZED_DIR = __DIR__ . '/../../var';
+    private const SERIALIZED_DIR = __DIR__ . '/../../var/cache';
 
     /**
      * @covers \pjpawel\LightApi\Component\Serializer
@@ -29,6 +29,7 @@ class SerializerTest extends TestCase
      */
     public function testLoadSerializedEmpty(): void
     {
+        $this->removeSerializedDir();
         $serializer = new Serializer(self::SERIALIZED_DIR);
         $loaded = $serializer->loadSerialized();
         $this->assertFalse($loaded);

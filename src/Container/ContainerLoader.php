@@ -41,9 +41,6 @@ class ContainerLoader implements ContainerInterface
                 throw new ProgrammerException('Invalid container definition for name ' . $name);
             }
         }
-        $this->definitions['container'] = new ClassDefinition('container', []);
-        $this->definitions['container']->object = $this;
-        $this->definitions['containerInterface'] = new InterfaceDefinition('containerInterface', '@container');
     }
 
     /**

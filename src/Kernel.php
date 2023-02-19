@@ -49,7 +49,6 @@ class Kernel
             ($config['serializeDir'] ?? self::SERIALIZE_DEFAULT_DIR));
         $this->boot($config);
         $this->loadKernelLogger();
-        $this->kernelLogger->info('Kernel was loaded');
     }
 
     protected function boot(array $config): void
@@ -105,20 +104,25 @@ class Kernel
 
     public function __destruct()
     {
-        $this->serializer->makeSerialization([
-            ContainerLoader::class => $this->containerLoader,
-            EndpointsLoader::class => $this->endpointsLoader,
-            CommandLoader::class => $this->commandLoader
-        ]);
+        if ($this->serializer->serializeOnDestruct) {
+            if ($this->containerLoader->has(Request::class)) {
+                unset($this->containerLoader->definitions[Request::class]);
+            }
+            $this->serializer->makeSerialization([
+                ContainerLoader::class => $this->containerLoader,
+                EndpointsLoader::class => $this->endpointsLoader,
+                CommandLoader::class => $this->commandLoader
+            ]);
+        }
     }
 
     protected function loadKernelLogger(): void
     {
         foreach (self::KERNEL_LOGGER_ALIASES as $alias) {
-            try {
+            if ($this->containerLoader->has($alias)) {
                 $this->containerLoader->get($alias);
                 return;
-            } catch (Exception $e) {}
+            }
         }
         $this->kernelLogger = new SimpleLogger($this->projectDir . DIRECTORY_SEPARATOR . self::LOGGER_DEFAULT_PATH);
     }
