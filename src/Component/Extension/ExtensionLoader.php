@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Component\Extension;
 
-use pjpawel\LightApi\Command\CommandLoader;
+use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 
@@ -25,7 +25,7 @@ class ExtensionLoader
     public function loadExtensions(
         ContainerLoader $container,
         EndpointsLoader $endpointsLoader,
-        CommandLoader $commandLoader
+        CommandsLoader $commandLoader
     ): void
     {
         foreach ($this->extensionConfigs as $extensionName => $extensionConfig) {

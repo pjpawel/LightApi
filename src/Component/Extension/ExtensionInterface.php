@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Component\Extension;
 
-use pjpawel\LightApi\Command\CommandLoader;
+use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 
@@ -15,6 +15,6 @@ interface ExtensionInterface
 
     public function registerRoutes(EndpointsLoader $endpointsLoader): void;
 
-    public function registerCommands(CommandLoader $commandLoader): void;
+    public function registerCommands(CommandsLoader $commandLoader): void;
 
 }
