@@ -6,7 +6,7 @@ class Option
 {
 
     public const OPTIONAL = 1;
-    public const REQUIRED = 1;
+    public const REQUIRED = 2;
 
     public string $name;
     public string $shortcut;

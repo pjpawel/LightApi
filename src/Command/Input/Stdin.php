@@ -86,7 +86,7 @@ class Stdin implements InputInterface
             if ($loadedOption !== false) {
                 $option->setValue($loadedOption['value']);
             }
-            if ($option->type == Argument::REQUIRED && $option->value == null) {
+            if ($option->type == Option::REQUIRED && $option->value == null) {
                 throw new Exception('Missing required option: ' . $option->name);
             }
         }
