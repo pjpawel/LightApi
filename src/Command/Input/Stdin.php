@@ -41,7 +41,7 @@ class Stdin implements InputInterface
                 continue;
             }
             if (str_contains($argv[$i], '=')) {
-                [$optionName, $value] = explode('=', $argv, 2);
+                [$optionName, $value] = explode('=', $argv[$i], 2);
                 if (empty($value)) {
                     throw new Exception('Missing value for option: ' . $optionName);
                 }
