@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Endpoint;
+namespace pjpawel\LightApi\Component;
 
 use Gnugat\NomoSpaco\File\FileRepository;
 use Gnugat\NomoSpaco\FqcnRepository;

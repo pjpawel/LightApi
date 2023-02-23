@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Component\Debug;
 
-use pjpawel\LightApi\Command\CommandLoader;
+use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Endpoint\EndpointsLoader;
 use pjpawel\LightApi\Kernel;
@@ -25,13 +25,11 @@ class KernelDebugger
         $endpointsLoaderReflection = $reflectionKernel->getProperty('endpointsLoader');
         /** @var EndpointsLoader $endpointsLoader */
         $endpointsLoader = $endpointsLoaderReflection->getValue($this->kernel);
-        $endpointsLoader->load($this->kernel->projectDir);
-        var_dump($endpointsLoader->serialize());
+        var_dump($endpointsLoader->endpoints);
 
         $commandLoaderReflection = $reflectionKernel->getProperty('commandLoader');
-        /** @var CommandLoader $commandLoader */
+        /** @var CommandsLoader $commandLoader */
         $commandLoader = $commandLoaderReflection->getValue($this->kernel);
-        $commandLoader->load();
         var_dump($commandLoader->command);
 
         $containerLoaderReflection = $reflectionKernel->getProperty('containerLoader');
