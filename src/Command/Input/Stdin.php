@@ -42,6 +42,9 @@ class Stdin implements InputInterface
             }
             if (str_contains($argv[$i], '=')) {
                 [$optionName, $value] = explode('=', $argv, 2);
+                if (empty($value)) {
+                    throw new Exception('Missing value for option: ' . $optionName);
+                }
                 if (str_starts_with($optionName, '--')) {
                     $loadedOptions[] = [
                         'shortName' => null,
@@ -58,6 +61,9 @@ class Stdin implements InputInterface
                     throw new KernelException('Uncovered option ' . $argv[$i]);
                 }
             } elseif (str_starts_with($argv[$i], '--')) {
+                if (!isset($argv[$i+1])) {
+                    throw new Exception('Missing value for option: ' . substr($argv[$i], 2));
+                }
                 $loadedOptions[] = [
                     'shortName' => null,
                     'longName' => substr($argv[$i], 2),
@@ -65,6 +71,9 @@ class Stdin implements InputInterface
                 ];
                 unset($argv[$i+1]);
             } elseif (str_starts_with($argv[$i], '-')) {
+                if (!isset($argv[$i+1])) {
+                    throw new Exception('Missing value for option: ' . substr($argv[$i], 1));
+                }
                 $loadedOptions[] = [
                     'shortName' => substr($argv[$i], 1),
                     'longName' => null,
