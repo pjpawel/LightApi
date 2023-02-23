@@ -10,9 +10,10 @@
 - [x] Logging
 - [x] Serializing
 - [ ] Add OpenAPI generator
-- [ ] Command and CommandLoader
-- [ ] Correct ContainerLoader and add ContainerTrait to inject services
+- [x] Command and CommandLoader
+- [ ] Correct ContainerLoader and add ContainerTrait to inject services (partialy)
+- [ ] Extend Command
 
-### Needed extension in future:
+### Needed extension in the future:
 - [ ] Session
 - [ ] Cache
