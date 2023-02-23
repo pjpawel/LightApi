@@ -5,11 +5,17 @@ namespace pjpawel\LightApi\Command\Output;
 class Stdout implements OutputInterface
 {
 
+    /**
+     * @inheritDoc
+     */
     public function write(string $text): void
     {
         echo $text;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function writeln(array|string $text): void
     {
         if (is_array($text)) {
