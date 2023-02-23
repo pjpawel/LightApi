@@ -17,7 +17,11 @@ class Stdin implements InputInterface
      */
     public array $arguments;
 
-    public function loadArgsDefinitions(array $arguments, array $options): void
+    /**
+     * @param Argument[] $arguments
+     * @param Option[] $options
+     */
+    public function __construct(array $arguments, array $options)
     {
         $this->arguments = $arguments;
         $this->options = $options;

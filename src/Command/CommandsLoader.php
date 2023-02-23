@@ -39,20 +39,17 @@ class CommandsLoader
         $className = $this->command[$commandName];
         $reflectionClass = new ReflectionClass($className);
         $constructor = $reflectionClass->getConstructor();
+        $args = [];
         if ($constructor !== null) {
-            $args = [];
             foreach ($constructor->getParameters() as $parameter) {
                 $args[] = $container->get($parameter->getType()->getName());
             }
         }
-        /* Prepare input */
-        $stdin = new Stdin();
-        $stdin->load();
         /** @var Command $command */
         $command = $reflectionClass->newInstanceArgs($args);
         $command->prepare();
-        $stdin->arguments = $command->arguments;
-        $stdin->options = $command->options;
+        /* Prepare input */
+        $stdin = new Stdin($command->arguments, $command->options);
         $stdin->load();
         return $command->execute($stdin, new Stdout());
     }
