@@ -84,7 +84,7 @@ class Stdin implements InputInterface
         foreach ($this->options as $option) {
             $loadedOption = $this->optionExists($loadedOptions, $option->shortcut, $option->name);
             if ($loadedOption !== false) {
-                $option->value = $loadedOption['value'];
+                $option->setValue($loadedOption['value']);
             }
             if ($option->type == Argument::REQUIRED && $option->value == null) {
                 throw new Exception('Missing required option: ' . $option->name);

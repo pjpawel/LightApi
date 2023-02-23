@@ -29,4 +29,12 @@ class Option
         $this->default = $default;
         $this->description = $description;
     }
+
+    /**
+     * @param string|null $value
+     */
+    public function setValue(?string $value): void
+    {
+        $this->value = $value;
+    }
 }

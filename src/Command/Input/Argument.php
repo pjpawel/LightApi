@@ -22,9 +22,9 @@ class Argument
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      */
-    public function setValue(string $value): void
+    public function setValue(?string $value): void
     {
         $this->value = $value;
     }
