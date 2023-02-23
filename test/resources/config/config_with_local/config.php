@@ -1,12 +1,13 @@
 <?php
 
+use pjpawel\LightApi\Test\resources\classes\Logger;
+
 return [
+    'services' => realpath(__DIR__ . '/../../classes/'),
     'trustedIPs' => [],
-    'controllers' => [],
-    'commands' => [],
-    'components' => [
-    ],
     'container' => [
-        \pjpawel\LightApi\Test\resources\classes\Logger::class => []
+        Logger::class => []
     ],
+    'extensions' => [
+    ]
 ];

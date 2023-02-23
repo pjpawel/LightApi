@@ -1,15 +1,14 @@
 <?php
 
+use pjpawel\LightApi\Test\resources\classes\Logger;
+
 return [
-    'projectDir' => __DIR__ . '/../../../../',
+    'projectDir' => realpath(__DIR__ . '/../../../../'),
+    'services' => realpath(__DIR__ . '/../../classes/'),
     'trustedIPs' => [],
-    'controllers' => [
-        \pjpawel\LightApi\Test\resources\classes\ControllerOne::class
-    ],
-    'commands' => [],
-    'components' => [
+    'extensions' => [
     ],
     'container' => [
-        \pjpawel\LightApi\Test\resources\classes\Logger::class => []
+        Logger::class => []
     ],
 ];
