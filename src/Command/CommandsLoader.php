@@ -39,9 +39,11 @@ class CommandsLoader
         $className = $this->command[$commandName];
         $reflectionClass = new ReflectionClass($className);
         $constructor = $reflectionClass->getConstructor();
-        $args = [];
-        foreach ($constructor->getParameters() as $parameter) {
-            $args[] = $container->get($parameter->getType()->getName());
+        if ($constructor !== null) {
+            $args = [];
+            foreach ($constructor->getParameters() as $parameter) {
+                $args[] = $container->get($parameter->getType()->getName());
+            }
         }
         /* Prepare input */
         $stdin = new Stdin();
