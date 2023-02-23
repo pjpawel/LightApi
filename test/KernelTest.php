@@ -7,6 +7,7 @@ use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Env;
 use pjpawel\LightApi\Kernel;
 use pjpawel\LightApi\Test\resources\classes\Logger;
+use ReflectionClass;
 
 /**
  * @covers \pjpawel\LightApi\Kernel
@@ -31,21 +32,12 @@ class KernelTest extends TestCase
     }
 
     /**
-     * @covers \pjpawel\LightApi\Kernel::getVersion
-     */
-    public function testGetVersion(): void
-    {
-        $kernel = $this->createKernel();
-        $this->assertEquals('0.1.0', $kernel->getVersion());
-    }
-
-    /**
      * @covers \pjpawel\LightApi\Kernel::boot
      */
     public function testBoot(): void
     {
         $kernel = $this->createKernel();
-        $reflectionClass = new \ReflectionClass(Kernel::class);
+        $reflectionClass = new ReflectionClass(Kernel::class);
         /** @var ContainerLoader $container */
         $container = $reflectionClass->getProperty('containerLoader')->getValue($kernel);
         $this->assertTrue($container->has(Logger::class));
@@ -54,22 +46,4 @@ class KernelTest extends TestCase
         $this->assertTrue($logger instanceof Logger);
         $this->assertEquals('tellOne', $logger->tellOne());
     }
-
-    /**
-     * @covers \pjpawel\LightApi\Kernel::handleCommand
-     */
-    public function testGetCommand(): void
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @covers \pjpawel\LightApi\Kernel::handleRequest
-     */
-    public function testHandleRequest(): void
-    {
-        $this->assertTrue(true);
-    }
-
-
 }

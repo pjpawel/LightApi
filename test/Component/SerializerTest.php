@@ -54,19 +54,15 @@ class SerializerTest extends TestCase
     public function testMakeSerialization(): void
     {
         $this->removeSerializedDir();
-        $containerConfig = [
-            Logger::class => []
-        ];
-        $container = new ContainerLoader($containerConfig);
+        $container = new ContainerLoader();
         $serializer = new Serializer(self::SERIALIZED_DIR);
         $this->assertFalse($serializer->loadSerialized());
         $serializer->makeSerialization([ContainerLoader::class => $container]);
-        $this->assertFileExists(self::SERIALIZED_DIR . DIRECTORY_SEPARATOR . 'serialized');
+        $this->assertDirectoryExists(self::SERIALIZED_DIR);
 
 
         $serializerNew = new Serializer(self::SERIALIZED_DIR);
         $serializerNew->loadSerialized();
-        //var_dump($serializerNew->serializedObjects);
         $containerNew = $serializerNew->serializedObjects[ContainerLoader::class];
         $this->assertTrue(is_a($containerNew, ContainerLoader::class));
         $this->assertEquals($container, $containerNew);

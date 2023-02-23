@@ -19,16 +19,7 @@ class ContainerLoader implements ContainerInterface
      * @param array<string, string|array> $config
      * @throws \Exception
      */
-    public function __construct(array $config)
-    {
-        $this->createDefinitions($config);
-    }
-
-    /**
-     * @param array<string, string|array> $config
-     * @throws \Exception
-     */
-    private function createDefinitions(array $config): void
+    public function createDefinitionsFromConfig(array $config): void
     {
         foreach ($config as $name => $value) {
             if (is_string($value) && str_starts_with($value, '@')) {

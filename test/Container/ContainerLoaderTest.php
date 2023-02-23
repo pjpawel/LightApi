@@ -29,11 +29,12 @@ class ContainerLoaderTest extends TestCase
     }
 
     /**
-     * @covers \pjpawel\LightApi\Container\ContainerLoader::createDefinitions
+     * @covers \pjpawel\LightApi\Container\ContainerLoader::createDefinitionsFromConfig
      */
     public function test__construct(): void
     {
-        $container = new ContainerLoader(self::CONFIG);
+        $container = new ContainerLoader();
+        $container->createDefinitionsFromConfig(self::CONFIG);
         $logger = $container->get(SimpleLogger::class);
         $this->assertLoggerIsSimpleLogger($logger);
         $logger = $container->get(LoggerInterface::class);
@@ -61,8 +62,10 @@ class ContainerLoaderTest extends TestCase
      */
     public function testAddDefinitions(): void
     {
-        $definitions = (new ContainerLoader(self::CONFIG))->definitions;
-        $container = new ContainerLoader([]);
+        $container = new ContainerLoader();
+        $container->createDefinitionsFromConfig(self::CONFIG);
+        $definitions = $container->definitions;
+        $container = new ContainerLoader();
         $container->addDefinitions($definitions);
         $this->assertLoggerIsSimpleLogger($container->get(SimpleLogger::class));
         $this->assertLoggerIsSimpleLogger($container->get(LoggerInterface::class));
@@ -73,7 +76,8 @@ class ContainerLoaderTest extends TestCase
      */
     public function testGetDefinitions(): void
     {
-        $container = new ContainerLoader(self::CONFIG);
+        $container = new ContainerLoader();
+        $container->createDefinitionsFromConfig(self::CONFIG);
         $definitions = $container->getDefinitions([
             SimpleLogger::class,
             LoggerInterface::class

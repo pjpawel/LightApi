@@ -24,13 +24,12 @@ class EnvTest extends TestCase
                 'env'=>'test',
                 'debug' => true,
                 'trustedIPs' => [],
-                'controllers' => [],
-                'commands' => [],
-                'components' => [
+                'extensions' => [
                 ],
                 'container' => [
                     resources\classes\Logger::class => []
                 ],
+                'services' => realpath(__DIR__ . '/resources/classes/')
             ],
             $config);
 
@@ -41,13 +40,12 @@ class EnvTest extends TestCase
                 'env'=>'test',
                 'debug' => true,
                 'trustedIPs' => ['127.0.0.1'],
-                'controllers' => [],
-                'commands' => [],
-                'components' => [
+                'extensions' => [
                 ],
                 'container' => [
                     resources\classes\Logger::class => []
                 ],
+                'services' => realpath(__DIR__ . '/resources/classes/')
             ],
             $config);
     }
