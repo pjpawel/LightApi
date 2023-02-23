@@ -11,7 +11,7 @@ use pjpawel\LightApi\Exception\ProgrammerException;
 class Command
 {
 
-    public const SUCCESS = 1;
+    public const SUCCESS = 0;
     public const FAILURE = 1;
     public const INVALID = 2;
 
@@ -49,16 +49,6 @@ class Command
         throw new ProgrammerException('You must implement');
     }
 
-    /**
-     * Method that will be called in CliRunner
-     *
-     * @return int
-     */
-    public function run(): int
-    {
-
-    }
-
     public function addOption(
         string $name,
         string $shortcut,
@@ -72,18 +62,10 @@ class Command
 
     public function addArgument(
         string $name,
-        string $shortcut,
-        int $type = Option::OPTIONAL,
-        mixed $default = null,
+        int $type = Argument::REQUIRED,
         string $description = null
     ): void
     {
-        $this->options[] = new Option($name, $shortcut, $type, $default, $description);
+        $this->arguments[] = new Argument($name, $type, $description);
     }
-
-    public function matchParameters(): void
-    {
-        
-    }
-
 }
