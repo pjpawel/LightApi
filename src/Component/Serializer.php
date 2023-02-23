@@ -7,9 +7,6 @@ use Exception;
 class Serializer
 {
 
-    private const SEPARATOR = '->';
-    private const SINGLE_FILE_NAME = 'serialized';
-
     private string $serializedDir;
     public bool $serializeOnDestruct = false;
     /**
@@ -28,29 +25,24 @@ class Serializer
             $this->serializeOnDestruct = true;
             return false;
         }
-        $serializedFile = $this->serializedDir . DIRECTORY_SEPARATOR . self::SINGLE_FILE_NAME;
-        if (!is_file($serializedFile)) {
-            $this->serializeOnDestruct = true;
-            return false;
-        }
         try {
             $ini = ini_get('error_reporting');
             if ($ini === false) {
                 $ini = -1;
             }
             error_reporting(E_ERROR);
-            $allSerializedObjects = file_get_contents($serializedFile);
-            error_reporting($ini);
-            if ($allSerializedObjects === false) {
-                throw new Exception('Cannot load serialized objects');
-            }
-            foreach (explode(PHP_EOL, $allSerializedObjects) as $serializedObject) {
-                if ($serializedObject === '') {
+            foreach (array_diff(scandir($this->serializedDir), ['.', '..']) as $file) {
+                $fileName = $this->serializedDir . DIRECTORY_SEPARATOR . $file;
+                if (!is_file($fileName)) {
                     continue;
                 }
-                $serialization = explode(self::SEPARATOR, $serializedObject);
-                $this->serializedObjects[$serialization[0]] = unserialize($serialization[1]);
+                $serialized = file_get_contents($fileName);
+                if ($serialized === false) {
+                    throw new Exception('Cannot load serialized object in ' . $fileName);
+                }
+                $this->serializedObjects[$this->makeClassNameFromFileName($file)] = unserialize($serialized);
             }
+            error_reporting($ini);
             return true;
         } catch (Exception $e) {
             error_reporting($ini);
@@ -66,17 +58,22 @@ class Serializer
      */
     public function makeSerialization(array $objects): void
     {
-        /** @var string[] $serializedObjects */
-        $serializedObjects = [];
-        foreach ($objects as $name => $object) {
-            $serializedObjects[] = $name . self::SEPARATOR . serialize($object) . PHP_EOL;
-        }
         if (!is_dir($this->serializedDir)) {
             mkdir($this->serializedDir, 0777, true);
         }
-        file_put_contents(
-            $this->serializedDir . DIRECTORY_SEPARATOR . self::SINGLE_FILE_NAME,
-            implode('', $serializedObjects));
+        foreach ($objects as $name => $object) {
+            file_put_contents($this->makeFileNameFromClassName($name), serialize($object));
+        }
+    }
+
+    private function makeFileNameFromClassName(string $className): string
+    {
+        return $this->serializedDir . DIRECTORY_SEPARATOR . str_replace('\\', '--', $className);
+    }
+
+    private function makeClassNameFromFileName(string $fileName): string
+    {
+        return str_replace('--', '\\', $fileName);
     }
 
 
