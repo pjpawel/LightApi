@@ -50,11 +50,11 @@ class CommandsLoader
             } else {
                 $args = [];
             }
+            $stdin = new Stdin();
             /** @var Command $command */
             $command = $reflectionClass->newInstanceArgs($args);
-            $command->prepare();
+            $command->prepare($stdin);
             /* Prepare input */
-            $stdin = new Stdin($command->arguments, $command->options);
             $stdin->load();
             return $command->execute($stdin, $stdout);
         } catch (Exception $e) {

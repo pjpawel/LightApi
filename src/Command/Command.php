@@ -26,9 +26,10 @@ abstract class Command
     /**
      * Method to prepare command arguments
      *
+     * @param InputInterface $input
      * @return void
      */
-    public function prepare(): void
+    public function prepare(InputInterface $input): void
     {
 
     }
@@ -43,24 +44,4 @@ abstract class Command
      * @return int
      */
     abstract public function execute(InputInterface $input, OutputInterface $output): int;
-
-    public function addOption(
-        string $name,
-        string $shortcut,
-        int $type = Option::OPTIONAL,
-        mixed $default = null,
-        string $description = null
-    ): void
-    {
-        $this->options[] = new Option($name, $shortcut, $type, $default, $description);
-    }
-
-    public function addArgument(
-        string $name,
-        int $type = Argument::REQUIRED,
-        string $description = null
-    ): void
-    {
-        $this->arguments[] = new Argument($name, $type, $description);
-    }
 }

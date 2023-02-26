@@ -18,16 +18,6 @@ class Stdin implements InputInterface
     public array $arguments;
 
     /**
-     * @param Argument[] $arguments
-     * @param Option[] $options
-     */
-    public function __construct(array $arguments, array $options)
-    {
-        $this->arguments = $arguments;
-        $this->options = $options;
-    }
-
-    /**
      * @return void
      * @throws KernelException
      * @throws Exception
@@ -119,6 +109,26 @@ class Stdin implements InputInterface
             }
         }
         return false;
+    }
+
+    public function addOption(
+        string $name,
+        string $shortcut = null,
+        int $type = Option::OPTIONAL,
+        mixed $default = null,
+        string $description = null
+    ): void
+    {
+        $this->options[] = new Option($name, $shortcut, $type, $default, $description);
+    }
+
+    public function addArgument(
+        string $name,
+        int $type = Argument::REQUIRED,
+        string $description = null
+    ): void
+    {
+        $this->arguments[] = new Argument($name, $type, $description);
     }
 
     /**
