@@ -2,13 +2,13 @@
 
 namespace pjpawel\LightApi\Command;
 
+use Exception;
 use pjpawel\LightApi\Command\Input\Stdin;
 use pjpawel\LightApi\Command\Output\Stdout;
+use pjpawel\LightApi\Container\ClassDefinition;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Container\ContainerNotFoundException;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
+use ReflectionNamedType;
 
 class CommandsLoader
 {
@@ -37,11 +37,18 @@ class CommandsLoader
             $className = $this->command[$commandName];
             $reflectionClass = new ReflectionClass($className);
             $constructor = $reflectionClass->getConstructor();
-            $args = [];
             if ($constructor !== null) {
+                /** @var ClassDefinition $classDefinition */
+                $classDefinition = $container->get($className);
+                $args = $classDefinition->arguments;
                 foreach ($constructor->getParameters() as $parameter) {
-                    $args[] = $container->get($parameter->getType()->getName());
+                    $parameterType = $parameter->getType();
+                    if ($parameterType instanceof ReflectionNamedType) {
+                        $args[] = $container->get($parameterType->getName());
+                    }
                 }
+            } else {
+                $args = [];
             }
             /** @var Command $command */
             $command = $reflectionClass->newInstanceArgs($args);
@@ -50,7 +57,7 @@ class CommandsLoader
             $stdin = new Stdin($command->arguments, $command->options);
             $stdin->load();
             return $command->execute($stdin, $stdout);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $stdout->writeln([
                 'Exception thrown during command',
                 $e->getMessage(),
