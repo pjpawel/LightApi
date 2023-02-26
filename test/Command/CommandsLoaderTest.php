@@ -20,11 +20,9 @@ class CommandsLoaderTest extends TestCase
     {
         $commandsLoader = new CommandsLoader();
         $commandsLoader->registerCommand('command:one', CommandOne::class);
-        ob_start();
+        $this->expectOutputString('CommandOne is running');
         $result = $commandsLoader->runCommandFromName('command:one', new ContainerLoader());
         $this->assertEquals(0, $result);
-        $output = ob_get_flush();
-        $this->assertEquals('CommandOne is running', $output);
     }
 
     /**
