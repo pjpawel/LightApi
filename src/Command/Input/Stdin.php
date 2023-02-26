@@ -11,11 +11,11 @@ class Stdin implements InputInterface
     /**
      * @var Option[]
      */
-    public array $options;
+    public array $options = [];
     /**
      * @var Argument[]
      */
-    public array $arguments;
+    public array $arguments = [];
 
     /**
      * @return void
