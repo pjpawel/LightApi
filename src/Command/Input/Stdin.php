@@ -30,6 +30,7 @@ class Stdin implements InputInterface
     /**
      * @return void
      * @throws KernelException
+     * @throws Exception
      */
     public function load(): void
     {
