@@ -29,29 +29,36 @@ class CommandsLoader
      * @param string $commandName
      * @param ContainerLoader $container
      * @return int
-     * @throws ContainerExceptionInterface
-     * @throws ContainerNotFoundException
-     * @throws NotFoundExceptionInterface
-     * @throws \ReflectionException|\pjpawel\LightApi\Exception\ProgrammerException
      */
     public function runCommandFromName(string $commandName, ContainerLoader $container): int
     {
-        $className = $this->command[$commandName];
-        $reflectionClass = new ReflectionClass($className);
-        $constructor = $reflectionClass->getConstructor();
-        $args = [];
-        if ($constructor !== null) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $args[] = $container->get($parameter->getType()->getName());
+        $stdout = new Stdout();
+        try {
+            $className = $this->command[$commandName];
+            $reflectionClass = new ReflectionClass($className);
+            $constructor = $reflectionClass->getConstructor();
+            $args = [];
+            if ($constructor !== null) {
+                foreach ($constructor->getParameters() as $parameter) {
+                    $args[] = $container->get($parameter->getType()->getName());
+                }
             }
+            /** @var Command $command */
+            $command = $reflectionClass->newInstanceArgs($args);
+            $command->prepare();
+            /* Prepare input */
+            $stdin = new Stdin($command->arguments, $command->options);
+            $stdin->load();
+            return $command->execute($stdin, $stdout);
+        } catch (\Exception $e) {
+            $stdout->writeln([
+                'Exception thrown during command',
+                $e->getMessage(),
+                'file: ' . $e->getFile(),
+                'line: ' . $e->getLine()
+            ]);
+            return Command::FAILURE;
         }
-        /** @var Command $command */
-        $command = $reflectionClass->newInstanceArgs($args);
-        $command->prepare();
-        /* Prepare input */
-        $stdin = new Stdin($command->arguments, $command->options);
-        $stdin->load();
-        return $command->execute($stdin, new Stdout());
     }
 
     public function getCommandNameFromServer(): string
