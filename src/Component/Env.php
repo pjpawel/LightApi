@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi;
+namespace pjpawel\LightApi\Component;
 
 class Env
 {

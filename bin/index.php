@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Component\Runner\HttpRunner;
-use pjpawel\LightApi\Env;
 use pjpawel\LightApi\Kernel;
 
 
