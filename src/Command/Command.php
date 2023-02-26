@@ -6,9 +6,8 @@ use pjpawel\LightApi\Command\Input\Argument;
 use pjpawel\LightApi\Command\Input\InputInterface;
 use pjpawel\LightApi\Command\Input\Option;
 use pjpawel\LightApi\Command\Output\OutputInterface;
-use pjpawel\LightApi\Exception\ProgrammerException;
 
-class Command
+abstract class Command
 {
 
     public const SUCCESS = 0;
@@ -42,12 +41,8 @@ class Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @phpstan-ignore
      */
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
-        throw new ProgrammerException('You must implement');
-    }
+    abstract public function execute(InputInterface $input, OutputInterface $output): int;
 
     public function addOption(
         string $name,

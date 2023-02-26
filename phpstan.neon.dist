@@ -5,5 +5,4 @@ parameters:
     #- test/
   excludePaths:
     - tests/resources/*
-    - src/Command/*
     - src/Component/Logger/MonologLoggerDefinition.php
