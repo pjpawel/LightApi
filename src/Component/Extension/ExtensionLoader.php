@@ -4,7 +4,7 @@ namespace pjpawel\LightApi\Component\Extension;
 
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Endpoint\EndpointsLoader;
+use pjpawel\LightApi\Route\Router;
 
 class ExtensionLoader
 {
@@ -24,8 +24,8 @@ class ExtensionLoader
 
     public function loadExtensions(
         ContainerLoader $container,
-        EndpointsLoader $endpointsLoader,
-        CommandsLoader $commandLoader
+        Router          $endpointsLoader,
+        CommandsLoader  $commandLoader
     ): void
     {
         foreach ($this->extensionConfigs as $extensionName => $extensionConfig) {

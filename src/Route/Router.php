@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Endpoint;
+namespace pjpawel\LightApi\Route;
 
 use Exception;
 use pjpawel\LightApi\Http\Exception\HttpException;
@@ -10,13 +10,13 @@ use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Http\ResponseStatus;
 
-class EndpointsLoader
+class Router
 {
 
     /**
-     * @var Endpoint[]
+     * @var Route[]
      */
-    public array $endpoints = [];
+    public array $routes = [];
 
     /**
      * Register new endpoint
@@ -30,34 +30,34 @@ class EndpointsLoader
      */
     public function registerEndpoint(string $className, string $methodName, string $path, array $httpMethods): void
     {
-        $endpoint = new Endpoint($className, $methodName, $path, $httpMethods);
-        $endpoint->makeRegexPath();
-        $this->endpoints[] = $endpoint;
+        $route = new Route($className, $methodName, $path, $httpMethods);
+        $route->makeRegexPath();
+        $this->routes[] = $route;
     }
 
     /**
      * @param Request $request
-     * @return Endpoint
+     * @return Route
      * @throws NotFoundHttpException
      * @throws MethodNotAllowedHttpException
      */
-    public function getEndpoint(Request $request): Endpoint
+    public function getRoute(Request $request): Route
     {
         $methodNotAllowed = false;
-        foreach ($this->endpoints as $endpoint) {
-            if (preg_match($endpoint->regexPath, $request->path) === 1) {
-                if (!empty($endpoint->httpMethods) && !in_array($request->method, $endpoint->httpMethods)) {
+        foreach ($this->routes as $route) {
+            if (preg_match($route->regexPath, $request->path) === 1) {
+                if (!empty($route->httpMethods) && !in_array($request->method, $route->httpMethods)) {
                     $methodNotAllowed = true;
                 } else {
-                    $matchedEndpoint = $endpoint;
+                    $matchedRoute = $route;
                 }
                 break;
             }
         }
-        if (!isset($matchedEndpoint)) {
+        if (!isset($matchedRoute)) {
             throw $methodNotAllowed ? new MethodNotAllowedHttpException() : new NotFoundHttpException();
         }
-        return $matchedEndpoint;
+        return $matchedRoute;
     }
 
     public function getErrorResponse(Exception|HttpException $exception): Response

@@ -9,7 +9,7 @@ use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
 use pjpawel\LightApi\Component\Serializer;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Endpoint\EndpointsLoader;
+use pjpawel\LightApi\Route\Router;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use Psr\Log\LoggerInterface;
@@ -38,7 +38,7 @@ class Kernel
     public string $projectDir;
     public string $env;
     public bool $debug;
-    private EndpointsLoader $endpointsLoader;
+    private Router $router;
     private CommandsLoader $commandLoader;
     private ContainerLoader $containerLoader;
     private Serializer $serializer;
@@ -61,16 +61,16 @@ class Kernel
     protected function boot(array $config): void
     {
         if (!$this->debug && $this->serializer->loadSerialized()) {
-            $this->endpointsLoader = $this->serializer->serializedObjects[EndpointsLoader::class];
+            $this->router = $this->serializer->serializedObjects[Router::class];
             $this->commandLoader = $this->serializer->serializedObjects[CommandsLoader::class];
             $this->containerLoader = $this->serializer->serializedObjects[ContainerLoader::class];
             return;
         }
         $classWalker = new ClassWalker($config['services'] ?? $this->projectDir);
         $this->containerLoader = new ContainerLoader();
-        $this->endpointsLoader = new EndpointsLoader();
+        $this->router = new Router();
         $this->commandLoader = new CommandsLoader();
-        $classWalker->register($this->containerLoader, $this->endpointsLoader, $this->commandLoader);
+        $classWalker->register($this->containerLoader, $this->router, $this->commandLoader);
         $this->containerLoader->createDefinitionsFromConfig($config['container']);
     }
 
@@ -84,12 +84,12 @@ class Kernel
         $request->logRequest($this->kernelLogger);
         $request->validateIp();
         try {
-            $endpoint = $this->endpointsLoader->getEndpoint($request);
+            $route = $this->router->getRoute($request);
         } catch (Exception $e) {
-            return $this->endpointsLoader->getErrorResponse($e);
+            return $this->router->getErrorResponse($e);
         }
         $this->containerLoader->add(['name' => Request::class, 'args' => [], 'object' => $request]);
-        return $endpoint->execute($this->containerLoader, $request);
+        return $route->execute($this->containerLoader, $request);
     }
 
     /**
@@ -112,7 +112,7 @@ class Kernel
             }
             $this->serializer->makeSerialization([
                 ContainerLoader::class => $this->containerLoader,
-                EndpointsLoader::class => $this->endpointsLoader,
+                Router::class => $this->router,
                 CommandsLoader::class => $this->commandLoader
             ]);
         }

@@ -5,8 +5,8 @@ namespace pjpawel\LightApi\Component;
 use pjpawel\LightApi\Command\AsCommand;
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Endpoint\AsRoute;
-use pjpawel\LightApi\Endpoint\EndpointsLoader;
+use pjpawel\LightApi\Route\AsRoute;
+use pjpawel\LightApi\Route\Router;
 use pjpawel\LightApi\Exception\ProgrammerException;
 use ReflectionClass;
 
@@ -22,7 +22,7 @@ class ClassWalker
 
     /**
      * @param ContainerLoader $containerLoader
-     * @param EndpointsLoader $endpointsLoader
+     * @param Router $endpointsLoader
      * @param CommandsLoader $commandsLoader
      * @return void
      * @throws ProgrammerException
@@ -30,8 +30,8 @@ class ClassWalker
      */
     public function register(
         ContainerLoader $containerLoader,
-        EndpointsLoader $endpointsLoader,
-        CommandsLoader $commandsLoader
+        Router          $endpointsLoader,
+        CommandsLoader  $commandsLoader
     ): void
     {
         if (is_file($this->servicePath) || !is_dir($this->servicePath)) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Endpoint;
+namespace pjpawel\LightApi\Route;
 
 use Attribute;
 

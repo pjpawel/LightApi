@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Endpoint;
+namespace pjpawel\LightApi\Route;
 
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Exception\KernelException;
@@ -12,7 +12,7 @@ use pjpawel\LightApi\Http\ResponseStatus;
 use ReflectionClass;
 use ReflectionNamedType;
 
-class Endpoint
+class Route
 {
 
     private string $className;

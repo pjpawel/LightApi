@@ -1,10 +1,10 @@
 <?php
 
-namespace pjpawel\LightApi\Test\Endpoint;
+namespace pjpawel\LightApi\Test\Route;
 
 use Exception;
-use pjpawel\LightApi\Endpoint\Endpoint;
-use pjpawel\LightApi\Endpoint\EndpointsLoader;
+use pjpawel\LightApi\Route\Route;
+use pjpawel\LightApi\Route\Router;
 use PHPUnit\Framework\TestCase;
 use pjpawel\LightApi\Http\Exception\MethodNotAllowedHttpException;
 use pjpawel\LightApi\Http\Request;
@@ -12,17 +12,17 @@ use pjpawel\LightApi\Http\ResponseStatus;
 use pjpawel\LightApi\Test\resources\classes\ControllerOne;
 
 /**
- * @covers \pjpawel\LightApi\Endpoint\EndpointsLoader
+ * @covers \pjpawel\LightApi\Route\Router
  */
-class EndpointsLoaderTest extends TestCase
+class RouterTest extends TestCase
 {
 
     /**
-     * @covers \pjpawel\LightApi\Endpoint\EndpointsLoader::getErrorResponse
+     * @covers \pjpawel\LightApi\Route\Router::getErrorResponse
      */
     public function testGetErrorResponse(): void
     {
-        $loader = new EndpointsLoader();
+        $loader = new Router();
         $exception = new Exception('Something wrong happened');
         $response = $loader->getErrorResponse($exception);
         $this->assertEquals('Internal server error occurred', $response->content);
@@ -34,15 +34,15 @@ class EndpointsLoaderTest extends TestCase
     }
 
     /**
-     * @covers \pjpawel\LightApi\Endpoint\EndpointsLoader::getEndpoint
-     * @covers \pjpawel\LightApi\Endpoint\EndpointsLoader::registerEndpoint
+     * @covers \pjpawel\LightApi\Route\Router::getRoute
+     * @covers \pjpawel\LightApi\Route\Router::registerEndpoint
      */
     public function testGetEndpoint(): void
     {
-        $loader = new EndpointsLoader();
+        $loader = new Router();
         $loader->registerEndpoint(ControllerOne::class, 'index', '/index', []);
         $request = new Request([], [], [], [], ['REQUESTED_METHOD' => 'GET', 'REQUEST_URI' => '/index', 'REMOTE_ADDR' => '127.0.0.1']);
-        $endpoint = $loader->getEndpoint($request);
-        $this->assertTrue($endpoint instanceof Endpoint);
+        $endpoint = $loader->getRoute($request);
+        $this->assertTrue($endpoint instanceof Route);
     }
 }
