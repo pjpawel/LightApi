@@ -17,8 +17,9 @@ class EnvTest extends TestCase
      */
     public function testGetConfigFromEnv()
     {
+        $env = new Env();
         $dir = __DIR__ . '/../resources/config/base_config/';
-        $config = Env::getConfigFromEnv($dir);
+        $config = $env->getConfigFromEnv($dir);
         $this->assertEquals(
             [
                 'projectDir' => realpath(__DIR__ . '/../../'),
@@ -35,7 +36,7 @@ class EnvTest extends TestCase
             $config);
 
         $dir = __DIR__ . '/../resources/config/config_with_local/';
-        $config = Env::getConfigFromEnv($dir);
+        $config = $env->getConfigFromEnv($dir);
         $this->assertEquals(
             [
                 'env'=>'test',
@@ -56,8 +57,9 @@ class EnvTest extends TestCase
      */
     public function testLoadConfigFile()
     {
+        $env = new Env();
         $filename = __DIR__ . '/../resources/config/base_config/env.php';
-        $config = Env::loadConfigFile($filename);
+        $config = $env->loadConfigFile($filename);
         $this->assertIsArray($config);
         $this->assertEquals(['env'=>'test', 'debug' => true], $config);
     }

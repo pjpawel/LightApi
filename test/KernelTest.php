@@ -18,8 +18,8 @@ class KernelTest extends TestCase
     private function createKernel(): Kernel
     {
         $configDir = __DIR__ . '/resources/config/base_config';
-        $config = Env::getConfigFromEnv($configDir);
-        return new Kernel($config);
+        //$config = Env::getConfigFromEnv($configDir);
+        return new Kernel($configDir);
     }
 
     /**

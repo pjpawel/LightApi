@@ -5,6 +5,7 @@ namespace pjpawel\LightApi;
 use Exception;
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Component\ClassWalker;
+use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
 use pjpawel\LightApi\Component\Serializer;
 use pjpawel\LightApi\Container\ContainerLoader;
@@ -44,8 +45,10 @@ class Kernel
     private LoggerInterface $kernelLogger;
 
 
-    public function __construct(array $config)
+    public function __construct(string $configDir)
     {
+        $env = new Env();
+        $config = $env->getConfigFromEnv($configDir);
         $this->projectDir = $config['projectDir'];
         $this->env = $config['env'];
         $this->debug = $config['debug'];
