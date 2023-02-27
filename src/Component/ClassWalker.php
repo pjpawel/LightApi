@@ -22,7 +22,7 @@ class ClassWalker
 
     /**
      * @param ContainerLoader $containerLoader
-     * @param Router $endpointsLoader
+     * @param Router $router
      * @param CommandsLoader $commandsLoader
      * @return void
      * @throws ProgrammerException
@@ -30,7 +30,7 @@ class ClassWalker
      */
     public function register(
         ContainerLoader $containerLoader,
-        Router          $endpointsLoader,
+        Router          $router,
         CommandsLoader  $commandsLoader
     ): void
     {
@@ -42,7 +42,7 @@ class ClassWalker
         foreach ($classFinder->getAllClassInDir($this->servicePath) as $className) {
             /* Add to container */
             $containerLoader->add(['name' => $className]);
-            /* Add endpoints or command if exists */
+            /* Add routes or command if exists */
             $reflectionClass = new ReflectionClass($className);
             $commandAttribute = $reflectionClass->getAttributes(AsCommand::class);
             if (!empty($commandAttribute)) {
@@ -53,7 +53,7 @@ class ClassWalker
                 if (!empty($attributes)) {
                     $attribute = $attributes[0];
                     $arguments = $attribute->getArguments();
-                    $endpointsLoader->registerEndpoint(
+                    $router->registerRoute(
                         $className,
                         $method->getName(),
                         $arguments[0],

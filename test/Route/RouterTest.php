@@ -22,27 +22,27 @@ class RouterTest extends TestCase
      */
     public function testGetErrorResponse(): void
     {
-        $loader = new Router();
+        $router = new Router();
         $exception = new Exception('Something wrong happened');
-        $response = $loader->getErrorResponse($exception);
+        $response = $router->getErrorResponse($exception);
         $this->assertEquals('Internal server error occurred', $response->content);
         $this->assertEquals(ResponseStatus::INTERNAL_SERVER_ERROR, $response->status);
         $exception = new MethodNotAllowedHttpException('Something wrong happened');
-        $response = $loader->getErrorResponse($exception);
+        $response = $router->getErrorResponse($exception);
         $this->assertEquals('Something wrong happened', $response->content);
         $this->assertEquals(ResponseStatus::METHOD_NOT_ALLOWED, $response->status);
     }
 
     /**
      * @covers \pjpawel\LightApi\Route\Router::getRoute
-     * @covers \pjpawel\LightApi\Route\Router::registerEndpoint
+     * @covers \pjpawel\LightApi\Route\Router::registerRoute
      */
-    public function testGetEndpoint(): void
+    public function testGetRoute(): void
     {
         $loader = new Router();
-        $loader->registerEndpoint(ControllerOne::class, 'index', '/index', []);
+        $loader->registerRoute(ControllerOne::class, 'index', '/index', []);
         $request = new Request([], [], [], [], ['REQUESTED_METHOD' => 'GET', 'REQUEST_URI' => '/index', 'REMOTE_ADDR' => '127.0.0.1']);
-        $endpoint = $loader->getRoute($request);
-        $this->assertTrue($endpoint instanceof Route);
+        $route = $loader->getRoute($request);
+        $this->assertTrue($route instanceof Route);
     }
 }

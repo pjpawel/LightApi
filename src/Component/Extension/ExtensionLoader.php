@@ -24,7 +24,7 @@ class ExtensionLoader
 
     public function loadExtensions(
         ContainerLoader $container,
-        Router          $endpointsLoader,
+        Router          $router,
         CommandsLoader  $commandLoader
     ): void
     {
@@ -39,7 +39,7 @@ class ExtensionLoader
             $extension = new $extensionClass();
             $extension->loadConfig($extensionConfig);
             $extension->registerServices($container);
-            $extension->registerRoutes($endpointsLoader);
+            $extension->registerRoutes($router);
             $extension->registerCommands($commandLoader);
         }
     }

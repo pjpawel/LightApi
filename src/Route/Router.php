@@ -19,7 +19,7 @@ class Router
     public array $routes = [];
 
     /**
-     * Register new endpoint
+     * Register new route
      *
      * @param string $className
      * @param string $methodName
@@ -28,7 +28,7 @@ class Router
      * @return void
      * @throws \ReflectionException
      */
-    public function registerEndpoint(string $className, string $methodName, string $path, array $httpMethods): void
+    public function registerRoute(string $className, string $methodName, string $path, array $httpMethods): void
     {
         $route = new Route($className, $methodName, $path, $httpMethods);
         $route->makeRegexPath();

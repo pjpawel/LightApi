@@ -13,7 +13,7 @@ interface ExtensionInterface
 
     public function registerServices(ContainerLoader $container): void;
 
-    public function registerRoutes(Router $endpointsLoader): void;
+    public function registerRoutes(Router $router): void;
 
     public function registerCommands(CommandsLoader $commandLoader): void;
 

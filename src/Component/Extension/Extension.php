@@ -21,7 +21,7 @@ class Extension implements ExtensionInterface
 
     }
 
-    public function registerRoutes(Router $endpointsLoader): void
+    public function registerRoutes(Router $router): void
     {
 
     }
