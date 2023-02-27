@@ -9,8 +9,14 @@ use Psr\Container\ContainerInterface;
  */
 class ContainerBag implements ContainerInterface
 {
-
     use ContainerTrait;
 
-
+    /**
+     * Definitions
+     * @param array<string, Definition> $definitions
+     */
+    public function __construct(array $definitions)
+    {
+        $this->definitions = $definitions;
+    }
 }

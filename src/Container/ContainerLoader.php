@@ -11,7 +11,7 @@ class ContainerLoader implements ContainerInterface
     use ContainerTrait;
 
     /**
-     * @var array<string, Definition>
+     * @var array<string,Definition>
      */
     public array $definitions;
 
@@ -73,5 +73,19 @@ class ContainerLoader implements ContainerInterface
             $definitions[] = $this->definitions[$id];
         }
         return $definitions;
+    }
+
+    /**
+     * @param array<string,string> $services
+     * @return ContainerBag
+     */
+    public function prepareContainerBag(array $services): ContainerBag
+    {
+        /** @var array<string, Definition> $definitions */
+        $definitions = [];
+        foreach ($services as $internalId => $serviceId) {
+            $definitions[$internalId] = $this->get($serviceId);
+        }
+        return new ContainerBag($definitions);
     }
 }
