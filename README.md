@@ -2,6 +2,7 @@
 ### *A fast and effective framework that doesn't affect your architecture*
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pjpawel/light-api.svg?style=flat-square)](https://packagist.org/packages/pjpawel/light-api)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pjpawel/LightApi/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pjpawel/LightApi/?branch=master)
 ![PHPStanLevel](https://img.shields.io/badge/PHPStan-5%20level-brightgreen.svg?style=flat)
 
 ### What's left in TODO:
