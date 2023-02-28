@@ -29,7 +29,7 @@ abstract class Command
      * @param InputInterface $input
      * @return void
      */
-    public function prepare(InputInterface $input): void
+    public function prepare(/** @scrutinizer ignore-unused */ InputInterface $input): void
     {
 
     }

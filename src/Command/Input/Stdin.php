@@ -27,7 +27,8 @@ class Stdin implements InputInterface
         $loadedArguments = [];
         $loadedOptions = [];
         $argv = $_SERVER['argv'];
-        for ($i=2; $i <= count($argv); $i++) {
+        $argvCount = count($argv);
+        for ($i = 2; $i <= $argvCount; $i++) {
             if (!isset($argv[$i])) {
                 continue;
             }

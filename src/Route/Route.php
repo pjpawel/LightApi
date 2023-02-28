@@ -43,7 +43,7 @@ class Route
             return;
         }
         $pathParameters = array_map(
-            function ($param) {
+            function($param) {
                 return substr($param[0], 1, strlen($param[0])-2);
             },
             $pathParameters
@@ -123,10 +123,10 @@ class Route
      * @throws \pjpawel\LightApi\Container\ContainerNotFoundException
      * @throws KernelException
      */
-    private function loadArguments(array $parameters, ContainerLoader $container, Request $request, bool $allowedPathArguments): array
+    private function loadArguments(array $parameters, ContainerLoader $container, Request $request): array
     {
-        if (preg_match($this->regexPath, $request->path, $pathParameters) === false) {
-            throw new KernelException('Cannot math regexpath to requested path while loading parameters');
+        if ($this->regexPath !== null && preg_match($this->regexPath, $request->path, $pathParameters) === false) {
+            throw new KernelException('Cannot math regex path to requested path while loading parameters');
         }
         array_shift($pathParameters);
         $pathParameterIndex = 0;

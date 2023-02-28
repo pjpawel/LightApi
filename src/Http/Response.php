@@ -48,7 +48,7 @@ class Response
         }
 
         foreach ($this->headers->parameters as $key => $value) {
-            header($key.': '.$value, true, $this->status->value);
+            header($key . ': ' . $value, true, $this->status->value);
         }
 
         /*foreach ($this->headers->allPreserveCaseWithoutCookies() as $name => $values) {

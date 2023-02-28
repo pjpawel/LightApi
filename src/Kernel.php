@@ -98,7 +98,7 @@ class Kernel
      */
     public function handleCommand(?string $commandName = null): int
     {
-        if ($commandName === null){
+        if ($commandName === null) {
             $commandName = $this->commandLoader->getCommandNameFromServer();
         }
         return $this->commandLoader->runCommandFromName($commandName, $this->containerLoader);

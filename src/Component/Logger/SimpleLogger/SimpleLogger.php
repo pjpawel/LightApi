@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Stringable;
 
 class SimpleLogger implements LoggerInterface
 {
@@ -16,7 +17,7 @@ class SimpleLogger implements LoggerInterface
     private string $logFilePath;
     private DateTimeZone $timeZone;
 
-    public function __construct(string $logFilePath, Level $logLevel = Level::Info)
+    public function __construct(string $logFilePath, Level $logLevel = Level::Debug)
     {
         if (!is_file($logFilePath)) {
             $this->createLogFile($logFilePath);
@@ -56,47 +57,47 @@ class SimpleLogger implements LoggerInterface
         }
     }
 
-    public function emergency(\Stringable|string $message, array $context = []): void
+    public function emergency(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Emergency, $message, $context);
     }
 
-    public function alert(\Stringable|string $message, array $context = []): void
+    public function alert(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Alert, $message, $context);
     }
 
-    public function critical(\Stringable|string $message, array $context = []): void
+    public function critical(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Critical, $message, $context);
     }
 
-    public function error(\Stringable|string $message, array $context = []): void
+    public function error(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Error, $message, $context);
     }
 
-    public function warning(\Stringable|string $message, array $context = []): void
+    public function warning(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Warning, $message, $context);
     }
 
-    public function notice(\Stringable|string $message, array $context = []): void
+    public function notice(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Notice, $message, $context);
     }
 
-    public function info(\Stringable|string $message, array $context = []): void
+    public function info(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Info, $message, $context);
     }
 
-    public function debug(\Stringable|string $message, array $context = []): void
+    public function debug(Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Emergency, $message, $context);
     }
 
-    public function log($level, \Stringable|string $message, array $context = []): void
+    public function log($level, Stringable|string $message, array $context = []): void
     {
         $this->addRecord(Level::Emergency, $message, $context);
     }

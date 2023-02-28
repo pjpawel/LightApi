@@ -29,7 +29,7 @@ class ExtensionLoader
     ): void
     {
         foreach ($this->extensionConfigs as $extensionName => $extensionConfig) {
-            if (is_int($extensionName)){
+            if (is_int($extensionName)) {
                 $extensionClass = $extensionConfig;
                 $extensionConfig = [];
             } else {

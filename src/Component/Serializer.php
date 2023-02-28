@@ -42,10 +42,10 @@ class Serializer
                 }
                 $this->serializedObjects[$this->makeClassNameFromFileName($file)] = unserialize($serialized);
             }
-            error_reporting($ini);
+            error_reporting((int) $ini);
             return true;
         } catch (Exception $e) {
-            error_reporting($ini);
+            error_reporting((int) $ini);
             error_log($e->getMessage());
             $this->serializeOnDestruct = true;
             return false;
