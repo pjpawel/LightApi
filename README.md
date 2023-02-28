@@ -9,7 +9,7 @@
 - [x] Serializing
 - [ ] Add OpenAPI generator
 - [x] Command and CommandLoader
-- [ ] Correct ContainerLoader and add ContainerTrait to inject services (partialy)
+- [ ] Test ContainerLoader and add ContainerTrait to inject services
 - [ ] Extend Command
 
 ### Needed extension in the future:
