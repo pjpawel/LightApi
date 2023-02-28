@@ -5,8 +5,8 @@ namespace pjpawel\LightApi\Component;
 use pjpawel\LightApi\Command\AsCommand;
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Endpoint\AsRoute;
-use pjpawel\LightApi\Endpoint\EndpointsLoader;
+use pjpawel\LightApi\Route\AsRoute;
+use pjpawel\LightApi\Route\Router;
 use pjpawel\LightApi\Exception\ProgrammerException;
 use ReflectionClass;
 
@@ -22,7 +22,7 @@ class ClassWalker
 
     /**
      * @param ContainerLoader $containerLoader
-     * @param EndpointsLoader $endpointsLoader
+     * @param Router $router
      * @param CommandsLoader $commandsLoader
      * @return void
      * @throws ProgrammerException
@@ -30,8 +30,8 @@ class ClassWalker
      */
     public function register(
         ContainerLoader $containerLoader,
-        EndpointsLoader $endpointsLoader,
-        CommandsLoader $commandsLoader
+        Router          $router,
+        CommandsLoader  $commandsLoader
     ): void
     {
         if (is_file($this->servicePath) || !is_dir($this->servicePath)) {
@@ -42,7 +42,7 @@ class ClassWalker
         foreach ($classFinder->getAllClassInDir($this->servicePath) as $className) {
             /* Add to container */
             $containerLoader->add(['name' => $className]);
-            /* Add endpoints or command if exists */
+            /* Add routes or command if exists */
             $reflectionClass = new ReflectionClass($className);
             $commandAttribute = $reflectionClass->getAttributes(AsCommand::class);
             if (!empty($commandAttribute)) {
@@ -53,7 +53,7 @@ class ClassWalker
                 if (!empty($attributes)) {
                     $attribute = $attributes[0];
                     $arguments = $attribute->getArguments();
-                    $endpointsLoader->registerEndpoint(
+                    $router->registerRoute(
                         $className,
                         $method->getName(),
                         $arguments[0],

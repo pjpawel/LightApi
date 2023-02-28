@@ -9,7 +9,7 @@ class Option
     public const REQUIRED = 2;
 
     public string $name;
-    public string $shortcut;
+    public ?string $shortcut;
     public int $type;
     public mixed $default;
     public ?string $description;
@@ -17,7 +17,7 @@ class Option
 
     public function __construct(
         string $name,
-        string $shortcut,
+        string $shortcut = null,
         int $type = Option::OPTIONAL,
         mixed $default = null,
         string $description = null

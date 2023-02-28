@@ -6,9 +6,8 @@ use pjpawel\LightApi\Command\Input\Argument;
 use pjpawel\LightApi\Command\Input\InputInterface;
 use pjpawel\LightApi\Command\Input\Option;
 use pjpawel\LightApi\Command\Output\OutputInterface;
-use pjpawel\LightApi\Exception\ProgrammerException;
 
-class Command
+abstract class Command
 {
 
     public const SUCCESS = 0;
@@ -27,9 +26,10 @@ class Command
     /**
      * Method to prepare command arguments
      *
+     * @param InputInterface $input
      * @return void
      */
-    public function prepare(): void
+    public function prepare(InputInterface $input): void
     {
 
     }
@@ -42,30 +42,6 @@ class Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @phpstan-ignore
      */
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
-        throw new ProgrammerException('You must implement');
-    }
-
-    public function addOption(
-        string $name,
-        string $shortcut,
-        int $type = Option::OPTIONAL,
-        mixed $default = null,
-        string $description = null
-    ): void
-    {
-        $this->options[] = new Option($name, $shortcut, $type, $default, $description);
-    }
-
-    public function addArgument(
-        string $name,
-        int $type = Argument::REQUIRED,
-        string $description = null
-    ): void
-    {
-        $this->arguments[] = new Argument($name, $type, $description);
-    }
+    abstract public function execute(InputInterface $input, OutputInterface $output): int;
 }

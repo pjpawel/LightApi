@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi;
+namespace pjpawel\LightApi\Component;
 
 class Env
 {
@@ -17,17 +17,17 @@ class Env
      * @param string $defaultConfigFile
      * @return array
      */
-    public static function getConfigFromEnv(string $dir, string $defaultConfigFile = 'config.php'): array
+    public function getConfigFromEnv(string $dir, string $defaultConfigFile = 'config.php'): array
     {
         $config = [];
         $dir .= DIRECTORY_SEPARATOR;
         $files = scandir($dir);
         if (in_array($defaultConfigFile, $files)) {
-            $config = self::loadConfigFile($dir . $defaultConfigFile);
+            $config = $this->loadConfigFile($dir . $defaultConfigFile);
         }
         foreach (self::ENV_FILES as $file) {
             if (in_array($file, $files)) {
-                $config = array_merge_recursive(self::loadConfigFile($dir . $file), $config);
+                $config = array_merge_recursive($this->loadConfigFile($dir . $file), $config);
             }
         }
         return $config;
@@ -39,7 +39,7 @@ class Env
      * @param string $filePath
      * @return array
      */
-    public static function loadConfigFile(string $filePath): array
+    public function loadConfigFile(string $filePath): array
     {
         return require $filePath;
     }

@@ -7,7 +7,7 @@ use ReflectionClass;
 trait ContainerTrait
 {
     /**
-     * @var Definition[]
+     * @var array<string,Definition>
      */
     public array $definitions;
 

@@ -3,8 +3,8 @@
 namespace pjpawel\LightApi\Test;
 
 use PHPUnit\Framework\TestCase;
+use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Container\ContainerLoader;
-use pjpawel\LightApi\Env;
 use pjpawel\LightApi\Kernel;
 use pjpawel\LightApi\Test\resources\classes\Logger;
 use ReflectionClass;
@@ -18,8 +18,8 @@ class KernelTest extends TestCase
     private function createKernel(): Kernel
     {
         $configDir = __DIR__ . '/resources/config/base_config';
-        $config = Env::getConfigFromEnv($configDir);
-        return new Kernel($config);
+        //$config = Env::getConfigFromEnv($configDir);
+        return new Kernel($configDir);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace pjpawel\LightApi\Test\resources\classes;
 
-use pjpawel\LightApi\Endpoint\AsRoute;
+use pjpawel\LightApi\Route\AsRoute;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 

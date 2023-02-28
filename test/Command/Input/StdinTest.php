@@ -15,16 +15,13 @@ class StdinTest extends TestCase
 
     private function getStdin(): Stdin
     {
-        $arguments = [
-            new Argument('first_arg'),
-            new Argument('sec_arg'),
-            new Argument('third_arg', Argument::OPTIONAL),
-        ];
-        $options = [
-            new Option('help', 'h'),
-            new Option('port', 'p', default: 5000),
-        ];
-        return new Stdin($arguments, $options);
+        $stdin = new Stdin();
+        $stdin->addArgument('first_arg');
+        $stdin->addArgument('sec_arg');
+        $stdin->addArgument('third_arg', Argument::OPTIONAL);
+        $stdin->addOption('help', 'h');
+        $stdin->addOption('port', 'p', default: 5000);
+        return $stdin;
     }
 
     /**
