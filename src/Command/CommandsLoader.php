@@ -7,6 +7,7 @@ use pjpawel\LightApi\Command\Input\Stdin;
 use pjpawel\LightApi\Command\Output\Stdout;
 use pjpawel\LightApi\Container\ClassDefinition;
 use pjpawel\LightApi\Container\ContainerLoader;
+use pjpawel\LightApi\Container\LazyServiceInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -56,6 +57,10 @@ class CommandsLoader
             $command->prepare($stdin);
             /* Prepare input */
             $stdin->load();
+            /* Inject services */
+            if (is_subclass_of($command, LazyServiceInterface::class)) {
+                $command->setContainer($container->prepareContainerBag($command::getAllServices()));
+            }
             return $command->execute($stdin, $stdout);
         } catch (Exception $e) {
             $stdout->writeln([

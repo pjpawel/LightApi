@@ -2,13 +2,18 @@
 
 namespace pjpawel\LightApi\Route;
 
+use Exception;
 use pjpawel\LightApi\Container\ContainerLoader;
+use pjpawel\LightApi\Container\ContainerNotFoundException;
+use pjpawel\LightApi\Container\LazyServiceInterface;
 use pjpawel\LightApi\Exception\KernelException;
 use pjpawel\LightApi\Exception\ProgrammerException;
 use pjpawel\LightApi\Http\Exception\HttpException;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Http\ResponseStatus;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -32,7 +37,7 @@ class Route
     /**
      * @return void
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function makeRegexPath(): void
     {
@@ -80,7 +85,7 @@ class Route
      * @return Response
      * @throws \ReflectionException
      * @throws \pjpawel\LightApi\Container\ContainerNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(ContainerLoader $container, Request $request): Response
     {
@@ -96,6 +101,10 @@ class Route
             $reflectionMethod = $reflectionClass->getMethod($this->methodName);
             $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request, true);
 
+            if (is_subclass_of($class, LazyServiceInterface::class)) {
+                $class->setContainer($container->prepareContainerBag($class::getAllServices()));
+            }
+
             $result = $reflectionMethod->invokeArgs($class, $args);
             if ($result instanceof Response) {
                 return $result;
@@ -108,7 +117,7 @@ class Route
             }
         } catch (HttpException $httpExc) {
             return new Response($httpExc->getMessage(), ResponseStatus::from($httpExc->getCode()));
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
             return new Response('Internal server error occurred', ResponseStatus::INTERNAL_SERVER_ERROR);
         }
     }
@@ -117,11 +126,12 @@ class Route
      * @param \ReflectionParameter[] $parameters
      * @param ContainerLoader $container
      * @param Request $request
-     * @param bool $allowedPathArguments
      * @return array
-     * @throws \ReflectionException
-     * @throws \pjpawel\LightApi\Container\ContainerNotFoundException
      * @throws KernelException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \ReflectionException
+     * @throws ContainerNotFoundException
      */
     private function loadArguments(array $parameters, ContainerLoader $container, Request $request): array
     {
