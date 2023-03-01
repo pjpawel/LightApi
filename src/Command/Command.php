@@ -2,9 +2,7 @@
 
 namespace pjpawel\LightApi\Command;
 
-use pjpawel\LightApi\Command\Input\Argument;
 use pjpawel\LightApi\Command\Input\InputInterface;
-use pjpawel\LightApi\Command\Input\Option;
 use pjpawel\LightApi\Command\Output\OutputInterface;
 
 abstract class Command
