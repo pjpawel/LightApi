@@ -54,9 +54,13 @@ class CommandsLoader
             $reflectionClass = new ReflectionClass($className);
             $constructor = $reflectionClass->getConstructor();
             if ($constructor !== null) {
-                /** @var ClassDefinition $classDefinition */
-                $classDefinition = $container->get($className);
-                $args = $classDefinition->arguments;
+                if ($container->has($className)) {
+                    /** @var ClassDefinition $classDefinition */
+                    $classDefinition = $container->get($className);
+                    $args = $classDefinition->arguments;
+                } else {
+                    $args = [];
+                }
                 foreach ($constructor->getParameters() as $parameter) {
                     $parameterType = $parameter->getType();
                     if ($parameterType instanceof ReflectionNamedType) {

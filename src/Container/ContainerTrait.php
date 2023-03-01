@@ -22,7 +22,7 @@ trait ContainerTrait
     public function get(string $id): object
     {
         if (!isset($this->definitions[$id])) {
-            throw new ContainerNotFoundException();
+            throw new ContainerNotFoundException("Service $id not found");
         }
         if ($this->definitions[$id]->object === null) {
             $this->loadObject($id);
