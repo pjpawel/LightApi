@@ -31,7 +31,10 @@ class WarmUpCacheCommand extends KernelAwareCommand
         /** @var Serializer $serializer */
         $serializer = $reflectionClass->getProperty('serializer')->getValue($this->kernel);
         $serializerClass = new ReflectionClass($serializer);
-        $this->filesManager->removeDirRecursive($serializerClass->getProperty('serializedDir')->getValue($serializer));
+        $serializerDir = $serializerClass->getProperty('serializedDir')->getValue($serializer);
+        if (is_dir($serializerDir)) {
+            $this->filesManager->removeDirRecursive($serializerDir);
+        }
         $serializer->makeSerialization([
             ContainerLoader::class => $reflectionClass->getProperty('containerLoader')->getValue($this->kernel),
             Router::class => $reflectionClass->getProperty('router')->getValue($this->kernel),
