@@ -3,7 +3,6 @@
 namespace pjpawel\LightApi\Command\Internal;
 
 use pjpawel\LightApi\Command\Command;
-use pjpawel\LightApi\Command\Input\InputInterface;
 use pjpawel\LightApi\Kernel;
 
 abstract class KernelAwareCommand extends Command
