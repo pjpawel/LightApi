@@ -15,15 +15,6 @@ abstract class Command
     public const INVALID = 2;
 
     /**
-     * @var Option[]
-     */
-    public array $options = [];
-    /**
-     * @var Argument[]
-     */
-    public array $arguments = [];
-
-    /**
      * Method to prepare command arguments
      *
      * @param InputInterface $input
