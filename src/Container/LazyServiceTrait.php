@@ -28,7 +28,8 @@ trait LazyServiceTrait
     {
         /** @var array<string,string> $services */
         $services = [];
-        if (method_exists(get_parent_class(self::class), __FUNCTION__)) {
+        if (get_parent_class(self::class) &&
+            method_exists(get_parent_class(self::class), __FUNCTION__)) {
             $services = parent::getLazyServices();
         }
         $reflectionClass = new ReflectionClass(self::class);
