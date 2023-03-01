@@ -40,8 +40,9 @@ class CommandsLoaderTest extends TestCase
     public function testRegisterCommand()
     {
         $commandsLoader = new CommandsLoader();
-        $this->assertCount(1, $commandsLoader->command);
+        $basicCommandsCount = count((new \ReflectionClass($commandsLoader))->getConstant('KERNEL_COMMANDS'));
+        $this->assertCount($basicCommandsCount, $commandsLoader->command);
         $commandsLoader->registerCommand('command:one', CommandOne::class);
-        $this->assertCount(2, $commandsLoader->command);
+        $this->assertCount($basicCommandsCount + 1, $commandsLoader->command);
     }
 }
