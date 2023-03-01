@@ -40,7 +40,7 @@ class DebugCommand extends KernelAwareCommand
         $toShow = match ($component) {
             'container' => $value->definitions,
             'router' => $value->routes,
-            'command' => $value->command
+            'commands' => $value->command
         };
         $output->write(var_export($toShow, true));
         return self::SUCCESS;
