@@ -135,6 +135,7 @@ class Route
      */
     private function loadArguments(array $parameters, ContainerLoader $container, Request $request): array
     {
+        $pathParameters = [];
         if ($this->regexPath !== null && preg_match($this->regexPath, $request->path, $pathParameters) === false) {
             throw new KernelException('Cannot math regex path to requested path while loading parameters');
         }
