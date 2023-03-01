@@ -5,6 +5,7 @@ namespace pjpawel\LightApi\Command\Internal;
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Command\Input\InputInterface;
 use pjpawel\LightApi\Command\Output\OutputInterface;
+use pjpawel\LightApi\Component\FilesManager;
 use pjpawel\LightApi\Component\Serializer;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Kernel;
@@ -13,6 +14,13 @@ use ReflectionClass;
 
 class WarmUpCacheCommand extends KernelAwareCommand
 {
+
+    private FilesManager $filesManager;
+
+    public function __construct()
+    {
+        $this->filesManager = new FilesManager();
+    }
 
     /**
      * @inheritDoc
@@ -23,10 +31,7 @@ class WarmUpCacheCommand extends KernelAwareCommand
         /** @var Serializer $serializer */
         $serializer = $reflectionClass->getProperty('serializer')->getValue($this->kernel);
         $serializerClass = new ReflectionClass($serializer);
-        if (rmdir($serializerClass->getProperty('serializedDir')->getValue($serializer))) {
-            throw new \Exception('Cannot remove dir: ' .
-                $serializerClass->getProperty('serializedDir')->getValue($serializer));
-        }
+        $this->filesManager->removeDirRecursive($serializerClass->getProperty('serializedDir')->getValue($serializer));
         $serializer->makeSerialization([
             ContainerLoader::class => $reflectionClass->getProperty('containerLoader')->getValue($this->kernel),
             Router::class => $reflectionClass->getProperty('router')->getValue($this->kernel),
