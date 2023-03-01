@@ -114,7 +114,7 @@ class Stdin implements InputInterface
 
     public function addOption(
         string $name,
-        string $shortcut = null,
+        ?string $shortcut = null,
         int $type = Option::OPTIONAL,
         mixed $default = null,
         string $description = null
