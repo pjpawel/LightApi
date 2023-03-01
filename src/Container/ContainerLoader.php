@@ -84,7 +84,7 @@ class ContainerLoader implements ContainerInterface
         /** @var array<string, Definition> $definitions */
         $definitions = [];
         foreach ($services as $internalId => $serviceId) {
-            $definitions[$internalId] = $this->get($serviceId);
+            $definitions[$internalId] = $this->definitions[$serviceId];
         }
         return new ContainerBag($definitions);
     }

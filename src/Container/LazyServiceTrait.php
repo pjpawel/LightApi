@@ -9,16 +9,14 @@ use ReflectionNamedType;
 trait LazyServiceTrait
 {
 
-    public ?ContainerInterface $container;
+    public ContainerInterface $container;
 
     /**
      * @inheritDoc
      */
-    public function setContainer(?ContainerInterface $container): void
+    public function setContainer(ContainerInterface $container): void
     {
-        if (isset($this->container)) {
-            $this->container = $container;
-        }
+        $this->container = $container;
     }
 
     /**
