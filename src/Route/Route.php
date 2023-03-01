@@ -94,12 +94,12 @@ class Route
             $constructor = $reflectionClass->getConstructor();
             $constructorArgs = [];
             if ($constructor != null) {
-                $constructorArgs = $this->loadArguments($constructor->getParameters(), $container, $request, false);
+                $constructorArgs = $this->loadArguments($constructor->getParameters(), $container, $request); //, false
             }
             $class = $reflectionClass->newInstanceArgs($constructorArgs);
 
             $reflectionMethod = $reflectionClass->getMethod($this->methodName);
-            $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request, true);
+            $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request); //, true
 
             if (is_subclass_of($class, LazyServiceInterface::class)) {
                 $class->setContainer($container->prepareContainerBag($class::getAllServices()));
