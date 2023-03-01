@@ -101,6 +101,9 @@ class Kernel
         if ($commandName === null) {
             $commandName = $this->commandLoader->getCommandNameFromServer();
         }
+        if (str_starts_with($commandName, 'kernel:')) {
+            return $this->commandLoader->runCommandFromName($commandName, $this->containerLoader, $this);
+        }
         return $this->commandLoader->runCommandFromName($commandName, $this->containerLoader);
     }
 

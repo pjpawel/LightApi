@@ -4,22 +4,33 @@ namespace pjpawel\LightApi\Command;
 
 use Exception;
 use pjpawel\LightApi\Command\Input\Stdin;
+use pjpawel\LightApi\Command\Internal\DebugCommand;
+use pjpawel\LightApi\Command\Internal\KernelAwareCommand;
 use pjpawel\LightApi\Command\Output\Stdout;
 use pjpawel\LightApi\Container\ClassDefinition;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Container\LazyServiceInterface;
+use pjpawel\LightApi\Kernel;
 use ReflectionClass;
 use ReflectionNamedType;
 
 class CommandsLoader
 {
 
+    private const KERNEL_COMMANDS = [
+        'kernel:debug' => DebugCommand::class
+    ];
+
     /**
      * @var array<string,string>
      */
     public array $command = [];
-    public bool $loaded = true;
 
+    
+    public function __construct()
+    {
+        $this->command = self::KERNEL_COMMANDS;
+    }
 
     public function registerCommand(string $commandName, string $className): void
     {
@@ -31,7 +42,7 @@ class CommandsLoader
      * @param ContainerLoader $container
      * @return int
      */
-    public function runCommandFromName(string $commandName, ContainerLoader $container): int
+    public function runCommandFromName(string $commandName, ContainerLoader $container, ?Kernel $kernel = null): int
     {
         $stdout = new Stdout();
         try {
@@ -60,6 +71,10 @@ class CommandsLoader
             /* Inject services */
             if (is_subclass_of($command, LazyServiceInterface::class)) {
                 $command->setContainer($container->prepareContainerBag($command::getAllServices()));
+            }
+            /* If $command is KernelAwareCommand set Kernel */
+            if (!is_null($kernel) && is_subclass_of($command, KernelAwareCommand::class)) {
+                $command->setKernel($kernel);
             }
             return $command->execute($stdin, $stdout);
         } catch (Exception $e) {
