@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Container;
+namespace pjpawel\LightApi\Container\Definition;
 
 abstract class DefinedDefinition extends Definition
 {

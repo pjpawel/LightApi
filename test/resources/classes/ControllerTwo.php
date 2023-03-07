@@ -2,9 +2,9 @@
 
 namespace pjpawel\LightApi\Test\resources\classes;
 
-use pjpawel\LightApi\Container\AsLazyService;
-use pjpawel\LightApi\Container\LazyServiceInterface;
-use pjpawel\LightApi\Container\LazyServiceTrait;
+use pjpawel\LightApi\Container\LazyService\AsLazyService;
+use pjpawel\LightApi\Container\LazyService\LazyServiceInterface;
+use pjpawel\LightApi\Container\LazyService\LazyServiceTrait;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Route\AsRoute;
 

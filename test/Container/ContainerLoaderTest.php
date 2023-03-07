@@ -2,11 +2,10 @@
 
 namespace pjpawel\LightApi\Test\Container;
 
-use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
-use pjpawel\LightApi\Container\AliasDefinition;
-use pjpawel\LightApi\Container\ClassDefinition;
-use pjpawel\LightApi\Container\ContainerLoader;
 use PHPUnit\Framework\TestCase;
+use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
+use pjpawel\LightApi\Container\ContainerLoader;
+use pjpawel\LightApi\Container\Definition\AliasDefinition;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -82,7 +81,7 @@ class ContainerLoaderTest extends TestCase
             SimpleLogger::class,
             LoggerInterface::class
         ]);
-        $this->assertTrue(is_a($definitions[0], ClassDefinition::class));
+        $this->assertTrue(is_a($definitions[0], \pjpawel\LightApi\Container\Definition\ClassDefinition::class));
         $this->assertTrue(is_a($definitions[1], AliasDefinition::class));
     }
 }

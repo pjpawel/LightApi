@@ -2,6 +2,10 @@
 
 namespace pjpawel\LightApi\Container;
 
+use pjpawel\LightApi\Container\Definition\ClassDefinition;
+use pjpawel\LightApi\Container\Definition\DefinedDefinition;
+use pjpawel\LightApi\Container\Definition\Definition;
+use pjpawel\LightApi\Container\Definition\InDirectDefinition;
 use ReflectionClass;
 
 trait ContainerTrait

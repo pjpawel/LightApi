@@ -3,7 +3,7 @@
 namespace pjpawel\LightApi\Component\Logger;
 
 use Monolog\Logger;
-use pjpawel\LightApi\Container\DefinedDefinition;
+use pjpawel\LightApi\Container\Definition\DefinedDefinition;
 use ReflectionClass;
 
 class MonologLoggerDefinition extends DefinedDefinition

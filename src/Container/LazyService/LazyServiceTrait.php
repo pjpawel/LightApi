@@ -1,6 +1,6 @@
 <?php
 
-namespace pjpawel\LightApi\Container;
+namespace pjpawel\LightApi\Container\LazyService;
 
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
