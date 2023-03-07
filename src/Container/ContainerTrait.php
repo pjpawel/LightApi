@@ -29,7 +29,16 @@ trait ContainerTrait
             throw new ContainerNotFoundException("Service $id not found");
         }
         if ($this->definitions[$id]->object === null) {
-            $this->loadObject($id);
+            $definition = $this->definitions[$id];
+            if ($definition instanceof ClassDefinition) {
+                $this->definitions[$id]->object = (new ReflectionClass($definition->name))
+                    ->newInstanceArgs($definition->arguments);
+            } elseif ($definition instanceof InDirectDefinition) {
+                return $this->get($definition->className);
+            } else {
+                /** @var DefinedDefinition $definition */
+                $this->definitions[$id]->object = $definition->load();
+            }
         }
         return $this->definitions[$id]->object;
     }
@@ -40,31 +49,7 @@ trait ContainerTrait
      */
     public function has(string $id): bool
     {
-        if (!isset($this->definitions[$id])) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * @param string $id
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \ReflectionException
-     */
-    protected function loadObject(string $id): void
-    {
-        $definition = $this->definitions[$id];
-        if ($definition instanceof ClassDefinition) {
-            $this->definitions[$id]->object = (new ReflectionClass($definition->name))
-                ->newInstanceArgs($definition->arguments);
-        } elseif ($definition instanceof InDirectDefinition) {
-            $this->definitions[$id]->object = $this->get($definition->className);
-        } else {
-            /** @var DefinedDefinition $definition */
-            $this->definitions[$id]->object = $definition->load();
-        }
+        return isset($this->definitions[$id]);
     }
 
 }
