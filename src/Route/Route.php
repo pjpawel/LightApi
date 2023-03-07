@@ -166,7 +166,7 @@ class Route
         return $args;
     }
 
-    public function serialize(): array
+    public function __serialize(): array
     {
         return [
             $this->className,
@@ -177,10 +177,12 @@ class Route
         ];
     }
 
-    public static function unserialize(array $data): self
+    public function __unserialize(array $data): void
     {
-        $self = new self($data[0], $data[1], $data[2], $data[4]);
-        $self->regexPath = $data[5];
-        return $self;
+        $this->className = $data[0];
+        $this->methodName = $data[1];
+        $this->path = $data[2];
+        $this->httpMethods = $data[3];
+        $this->regexPath = $data[4];
     }
 }
