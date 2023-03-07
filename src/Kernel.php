@@ -125,7 +125,7 @@ class Kernel
     {
         foreach (self::KERNEL_LOGGER_ALIASES as $alias) {
             if ($this->containerLoader->has($alias)) {
-                $this->containerLoader->get($alias);
+                $this->kernelLogger = $this->containerLoader->get($alias);
                 return;
             }
         }
