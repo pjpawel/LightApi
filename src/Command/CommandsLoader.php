@@ -78,7 +78,8 @@ class CommandsLoader
             $stdin->load();
             /* Inject services */
             if (is_subclass_of($command, LazyServiceInterface::class)) {
-                $command->setContainer($container->prepareContainerBag($command::getAllServices()));
+                $container->prepareContainerLocator($command::getAllServices());
+                $command->setContainer($container);
             }
             /* If $command is KernelAwareCommand set Kernel */
             if (!is_null($kernel) && is_subclass_of($command, KernelAwareCommand::class)) {

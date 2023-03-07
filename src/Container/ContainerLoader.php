@@ -2,6 +2,10 @@
 
 namespace pjpawel\LightApi\Container;
 
+use pjpawel\LightApi\Container\Definition\AliasDefinition;
+use pjpawel\LightApi\Container\Definition\ClassDefinition;
+use pjpawel\LightApi\Container\Definition\Definition;
+use pjpawel\LightApi\Container\Definition\InterfaceDefinition;
 use pjpawel\LightApi\Exception\ProgrammerException;
 use Psr\Container\ContainerInterface;
 
@@ -77,15 +81,12 @@ class ContainerLoader implements ContainerInterface
 
     /**
      * @param array<string,string> $services
-     * @return ContainerBag
+     * @return void
      */
-    public function prepareContainerBag(array $services): ContainerBag
+    public function prepareContainerLocator(array $services): void
     {
-        /** @var array<string, Definition> $definitions */
-        $definitions = [];
         foreach ($services as $internalId => $serviceId) {
-            $definitions[$internalId] = $this->definitions[$serviceId];
+            $this->definitions[$internalId] = new AliasDefinition($internalId, $serviceId);
         }
-        return new ContainerBag($definitions);
     }
 }
