@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
 class Kernel
 {
 
-    public const VERSION = 001000;
-    public const VERSION_DOTTED = '0.1.0';
+    public const VERSION = 002001;
+    public const VERSION_DOTTED = '0.2.1';
     /* only for stable version */
     //public const VERSION_END_OF_LIFE = '06/2023';
     //public const VERSION_END_OF_MAINTENANCE = '03/2023';
