@@ -5,7 +5,10 @@ namespace pjpawel\LightApi\Command;
 use Exception;
 use pjpawel\LightApi\Command\Input\Stdin;
 use pjpawel\LightApi\Command\Internal\CacheClearCommand;
+use pjpawel\LightApi\Command\Internal\DebugCommandLoaderCommand;
+use pjpawel\LightApi\Command\Internal\DebugContainerCommand;
 use pjpawel\LightApi\Command\Internal\DebugCommand;
+use pjpawel\LightApi\Command\Internal\DebugRouterCommand;
 use pjpawel\LightApi\Command\Internal\KernelAwareCommand;
 use pjpawel\LightApi\Command\Internal\WarmUpCacheCommand;
 use pjpawel\LightApi\Command\Output\Stdout;
@@ -22,7 +25,10 @@ class CommandsLoader
     private const KERNEL_COMMANDS = [
         'kernel:debug' => DebugCommand::class,
         'kernel:cache:warmup' => WarmUpCacheCommand::class,
-        'kernel:cache:clear' => CacheClearCommand::class
+        'kernel:cache:clear' => CacheClearCommand::class,
+        'kernel:debug:container' => DebugContainerCommand::class,
+        'kernel:debug:router' => DebugRouterCommand::class,
+        'kernel:debug:command' => DebugCommandLoaderCommand::class
     ];
 
     /**
