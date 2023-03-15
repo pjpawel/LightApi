@@ -8,4 +8,14 @@ use Attribute;
 class AsEvent
 {
 
+    /**
+     * @var string Event name
+     */
+    public string $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
 }

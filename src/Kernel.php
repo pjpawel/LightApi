@@ -6,6 +6,7 @@ use Exception;
 use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Component\ClassWalker;
 use pjpawel\LightApi\Component\Env;
+use pjpawel\LightApi\Component\Event\EventHandler;
 use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
 use pjpawel\LightApi\Component\Serializer;
 use pjpawel\LightApi\Container\ContainerLoader;
@@ -43,6 +44,7 @@ class Kernel
     private ContainerLoader $containerLoader;
     private Serializer $serializer;
     private LoggerInterface $kernelLogger;
+    private EventHandler $eventHandler;
 
 
     public function __construct(string $configDir)
@@ -56,6 +58,11 @@ class Kernel
             ($config['serializeDir'] ?? self::SERIALIZE_DEFAULT_DIR));
         $this->boot($config);
         $this->loadKernelLogger();
+        if (!$this->containerLoader->has(EventHandler::class)) {
+            $this->containerLoader->add(['name' => EventHandler::class]);
+            $this->eventHandler = $this->containerLoader->get(EventHandler::class);
+        }
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_AFTER_BOOT);
     }
 
     protected function boot(array $config): void
@@ -83,13 +90,16 @@ class Kernel
     {
         $request->logRequest($this->kernelLogger);
         $request->validateIp();
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_BEFORE_REQUEST);
         try {
             $route = $this->router->getRoute($request);
         } catch (Exception $e) {
             return $this->router->getErrorResponse($e);
         }
         $this->containerLoader->add(['name' => Request::class, 'args' => [], 'object' => $request]);
-        return $route->execute($this->containerLoader, $request);
+        $response = $route->execute($this->containerLoader, $request);
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_AFTER_REQUEST);
+        return $response;
     }
 
     /**
@@ -101,14 +111,18 @@ class Kernel
         if ($commandName === null) {
             $commandName = $this->commandLoader->getCommandNameFromServer();
         }
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_BEFORE_COMMAND);
         if (str_starts_with($commandName, 'kernel:')) {
             return $this->commandLoader->runCommandFromName($commandName, $this->containerLoader, $this);
         }
-        return $this->commandLoader->runCommandFromName($commandName, $this->containerLoader);
+        $code = $this->commandLoader->runCommandFromName($commandName, $this->containerLoader);
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_AFTER_COMMAND);
+        return $code;
     }
 
     public function __destruct()
     {
+        $this->eventHandler->tryTriggering(EventHandler::KERNEL_ON_DESTRUCT);
         if ($this->serializer->serializeOnDestruct) {
             if ($this->containerLoader->has(Request::class)) {
                 unset($this->containerLoader->definitions[Request::class]);
