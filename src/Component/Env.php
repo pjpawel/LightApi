@@ -2,6 +2,8 @@
 
 namespace pjpawel\LightApi\Component;
 
+use pjpawel\LightApi\Exception\ProgrammerException;
+
 class Env
 {
 
@@ -31,6 +33,19 @@ class Env
             }
         }
         return $config;
+    }
+
+    /**
+     * @param array $classConfig
+     * @return object
+     * @throws ProgrammerException|\ReflectionException
+     */
+    public function createClassFromConfig(array $classConfig): object
+    {
+        if (!isset($classConfig['class'])) {
+            throw new ProgrammerException('Cannot create class from config');
+        }
+        return (new \ReflectionClass($classConfig['class']))->newInstanceArgs($classConfig['args'] ?? []);
     }
 
     /**
