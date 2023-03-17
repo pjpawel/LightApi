@@ -4,6 +4,7 @@ namespace pjpawel\LightApi\Container\LazyService;
 
 use Psr\Container\ContainerInterface;
 
+/** @deprecated  */
 interface LazyServiceInterface
 {
 

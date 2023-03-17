@@ -12,9 +12,9 @@ use pjpawel\LightApi\Command\Internal\DebugRouterCommand;
 use pjpawel\LightApi\Command\Internal\KernelAwareCommand;
 use pjpawel\LightApi\Command\Internal\WarmUpCacheCommand;
 use pjpawel\LightApi\Command\Output\Stdout;
+use pjpawel\LightApi\Container\Awareness\ContainerAwareInterface;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Container\Definition\ClassDefinition;
-use pjpawel\LightApi\Container\LazyService\LazyServiceInterface;
 use pjpawel\LightApi\Kernel;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -83,8 +83,7 @@ class CommandsLoader
             /* Prepare input */
             $stdin->load();
             /* Inject services */
-            if (is_subclass_of($command, LazyServiceInterface::class)) {
-                $container->prepareContainerLocator($command::getAllServices());
+            if (is_subclass_of($command, ContainerAwareInterface::class)) {
                 $command->setContainer($container);
             }
             /* If $command is KernelAwareCommand set Kernel */

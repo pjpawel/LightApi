@@ -2,21 +2,19 @@
 
 namespace pjpawel\LightApi\Test\resources\classes;
 
-use pjpawel\LightApi\Container\LazyService\AsLazyService;
-use pjpawel\LightApi\Container\LazyService\LazyServiceInterface;
-use pjpawel\LightApi\Container\LazyService\LazyServiceTrait;
+use pjpawel\LightApi\Container\Awareness\ContainerAwareInterface;
+use pjpawel\LightApi\Container\Awareness\ContainerAwareTrait;
 use pjpawel\LightApi\Http\Response;
 use pjpawel\LightApi\Route\AsRoute;
 
-class ControllerTwo implements LazyServiceInterface
+class ControllerTwo implements ContainerAwareInterface
 {
 
-    use LazyServiceTrait;
+    use ContainerAwareTrait;
 
-    #[AsLazyService]
     protected function logger(): Logger
     {
-        return $this->container->get(__METHOD__);
+        return $this->container->get(Logger::class);
     }
 
     #[AsRoute('/index')]

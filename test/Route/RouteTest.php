@@ -106,7 +106,7 @@ class RouteTest extends TestCase
     /**
      * @covers \pjpawel\LightApi\Route\Route::execute
      */
-    public function testExecuteWithLazyServices(): void
+    public function testExecuteWithContainerServices(): void
     {
         $route = new Route(ControllerTwo::class, 'index', '/index', ['GET']);
         $route->makeRegexPath();

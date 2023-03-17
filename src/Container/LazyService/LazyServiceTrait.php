@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 
+/** @deprecated  */
 trait LazyServiceTrait
 {
 

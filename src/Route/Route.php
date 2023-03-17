@@ -3,9 +3,9 @@
 namespace pjpawel\LightApi\Route;
 
 use Exception;
+use pjpawel\LightApi\Container\Awareness\ContainerAwareInterface;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Container\ContainerNotFoundException;
-use pjpawel\LightApi\Container\LazyService\LazyServiceInterface;
 use pjpawel\LightApi\Exception\KernelException;
 use pjpawel\LightApi\Exception\ProgrammerException;
 use pjpawel\LightApi\Http\Exception\HttpException;
@@ -84,7 +84,7 @@ class Route
      * @param Request $request
      * @return Response
      * @throws \ReflectionException
-     * @throws \pjpawel\LightApi\Container\ContainerNotFoundException
+     * @throws ContainerNotFoundException
      * @throws Exception
      */
     public function execute(ContainerLoader $container, Request $request): Response
@@ -101,8 +101,7 @@ class Route
             $reflectionMethod = $reflectionClass->getMethod($this->methodName);
             $args = $this->loadArguments($reflectionMethod->getParameters(), $container, $request); //, true
 
-            if (is_subclass_of($class, LazyServiceInterface::class)) {
-                $container->prepareContainerLocator($class::getAllServices());
+            if (is_subclass_of($class, ContainerAwareInterface::class)) {
                 $class->setContainer($container);
             }
 
