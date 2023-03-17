@@ -7,13 +7,12 @@ use pjpawel\LightApi\Command\CommandsLoader;
 use pjpawel\LightApi\Component\ClassWalker;
 use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Component\Event\EventHandler;
-use pjpawel\LightApi\Component\Logger\SimpleLogger\SimpleLogger;
-use pjpawel\LightApi\Component\Serializer;
 use pjpawel\LightApi\Container\ContainerLoader;
 use pjpawel\LightApi\Route\Router;
 use pjpawel\LightApi\Http\Request;
 use pjpawel\LightApi\Http\Response;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
 
 class Kernel
 {
@@ -24,13 +23,12 @@ class Kernel
     //public const VERSION_END_OF_LIFE = '06/2023';
     //public const VERSION_END_OF_MAINTENANCE = '03/2023';
 
-    private const RUNTIME_DIR = 'var' . DIRECTORY_SEPARATOR;
-    private const SERIALIZE_DEFAULT_DIR = self::RUNTIME_DIR . 'cache';
-    private const LOGGER_DEFAULT_PATH = self::RUNTIME_DIR . 'log' . DIRECTORY_SEPARATOR . 'app.log';
-    private const KERNEL_LOGGER_ALIASES = [
-        'logger.kernel',
-        'monolog.kernel',
-        LoggerInterface::class
+    public const KERNEL_CACHE_NAME = 'kernel.cache';
+    public const KERNEL_LOGGER_NAME = 'kernel.logger';
+    private const PROPERTIES_TO_CACHE = [
+        'containerLoader' => 'kernel.container',
+        'router' => 'kernel.router',
+        'commandLoader' => 'kernel.command'
     ];
 
     /**
@@ -42,10 +40,9 @@ class Kernel
     private Router $router;
     private CommandsLoader $commandLoader;
     private ContainerLoader $containerLoader;
-    private Serializer $serializer;
-    private LoggerInterface $kernelLogger;
+    private ?LoggerInterface $kernelLogger;
     private EventHandler $eventHandler;
-
+    private AbstractAdapter $kernelCache;
 
     public function __construct(string $configDir)
     {
@@ -54,31 +51,48 @@ class Kernel
         $this->projectDir = $config['projectDir'];
         $this->env = $config['env'];
         $this->debug = $config['debug'];
-        $this->serializer = new Serializer($this->projectDir . DIRECTORY_SEPARATOR .
-            ($config['serializeDir'] ?? self::SERIALIZE_DEFAULT_DIR));
+        $this->kernelCache = $env->createClassFromConfig($config['cache']);
         $this->boot($config);
-        $this->loadKernelLogger();
-        if (!$this->containerLoader->has(EventHandler::class)) {
-            $this->containerLoader->add(['name' => EventHandler::class]);
-            $this->eventHandler = $this->containerLoader->get(EventHandler::class);
-        }
+        $this->ensureContainerHasKernelServices();
         $this->eventHandler->tryTriggering(EventHandler::KERNEL_AFTER_BOOT);
     }
 
     protected function boot(array $config): void
     {
-        if (!$this->debug && $this->serializer->loadSerialized()) {
-            $this->router = $this->serializer->serializedObjects[Router::class];
-            $this->commandLoader = $this->serializer->serializedObjects[CommandsLoader::class];
-            $this->containerLoader = $this->serializer->serializedObjects[ContainerLoader::class];
-            return;
+        $loaded = false;
+        if (!$this->debug) {
+            $loaded = true;
+            foreach (self::PROPERTIES_TO_CACHE as $property => $cacheName) {
+                $routerItem = $this->kernelCache->getItem($cacheName);
+                if (!$routerItem->isHit()) {
+                    $loaded = false;
+                    break;
+                }
+                $this->$property = $routerItem->get();
+            }
         }
-        $classWalker = new ClassWalker($config['services'] ?? $this->projectDir);
-        $this->containerLoader = new ContainerLoader();
-        $this->router = new Router();
-        $this->commandLoader = new CommandsLoader();
-        $classWalker->register($this->containerLoader, $this->router, $this->commandLoader);
-        $this->containerLoader->createDefinitionsFromConfig($config['container']);
+        if (!$loaded) {
+            $classWalker = new ClassWalker($config['services'] ?? $this->projectDir);
+            $this->containerLoader = new ContainerLoader();
+            $this->router = new Router();
+            $this->commandLoader = new CommandsLoader();
+            $classWalker->register($this->containerLoader, $this->router, $this->commandLoader);
+            $this->containerLoader->createDefinitionsFromConfig($config['container']);
+        }
+    }
+
+    private function ensureContainerHasKernelServices(): void
+    {
+        if (!$this->containerLoader->has(EventHandler::class)) {
+            $this->containerLoader->add(['name' => EventHandler::class]);
+            $this->eventHandler = $this->containerLoader->get(EventHandler::class);
+        }
+        $this->containerLoader->add(['name' => self::KERNEL_CACHE_NAME, 'object' => $this->kernelCache]);
+        if ($this->containerLoader->has(self::KERNEL_LOGGER_NAME)) {
+            $this->kernelLogger = $this->containerLoader->get(self::KERNEL_LOGGER_NAME);
+        } else {
+            $this->kernelLogger = null;
+        }
     }
 
     /**
@@ -123,26 +137,11 @@ class Kernel
     public function __destruct()
     {
         $this->eventHandler->tryTriggering(EventHandler::KERNEL_ON_DESTRUCT);
-        if ($this->serializer->serializeOnDestruct) {
-            if ($this->containerLoader->has(Request::class)) {
-                unset($this->containerLoader->definitions[Request::class]);
-            }
-            $this->serializer->makeSerialization([
-                ContainerLoader::class => $this->containerLoader,
-                Router::class => $this->router,
-                CommandsLoader::class => $this->commandLoader
-            ]);
-        }
-    }
-
-    protected function loadKernelLogger(): void
-    {
-        foreach (self::KERNEL_LOGGER_ALIASES as $alias) {
-            if ($this->containerLoader->has($alias)) {
-                $this->kernelLogger = $this->containerLoader->get($alias);
-                return;
+        if (!$this->debug) {
+            foreach (self::PROPERTIES_TO_CACHE as $property => $cacheName) {
+                $cacheItem = $this->kernelCache->getItem($cacheName);
+                $cacheItem->set($this->$property);
             }
         }
-        $this->kernelLogger = new SimpleLogger($this->projectDir . DIRECTORY_SEPARATOR . self::LOGGER_DEFAULT_PATH);
     }
 }

@@ -5,6 +5,7 @@ namespace pjpawel\LightApi\Test\Component;
 use PHPUnit\Framework\TestCase;
 use pjpawel\LightApi\Component\Env;
 use pjpawel\LightApi\Test\resources;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * @covers \pjpawel\LightApi\Component\Env
@@ -20,9 +21,10 @@ class EnvTest extends TestCase
         $env = new Env();
         $dir = __DIR__ . '/../resources/config/base_config/';
         $config = $env->getConfigFromEnv($dir);
+        $projectDir = realpath(__DIR__ . '/../../');
         $this->assertEquals(
             [
-                'projectDir' => realpath(__DIR__ . '/../../'),
+                'projectDir' => $projectDir,
                 'env'=>'test',
                 'debug' => true,
                 'trustedIPs' => [],
@@ -31,7 +33,13 @@ class EnvTest extends TestCase
                 'container' => [
                     resources\classes\Logger::class => []
                 ],
-                'services' => realpath(__DIR__ . '/../resources/classes/')
+                'services' => realpath(__DIR__ . '/../resources/classes/'),
+                'cache' => [
+                    'class' => FilesystemAdapter::class,
+                    'args' => [
+                        'kernel', 0, $projectDir . '/var/cache'
+                    ]
+                ]
             ],
             $config);
 

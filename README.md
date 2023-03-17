@@ -7,12 +7,11 @@
 
 ### What's left in TODO:
 - [x] Logging
-- [x] Serializing
 - [ ] Add OpenAPI generator
 - [x] Command and CommandLoader
-- [ ] Test ContainerLoader and add ContainerTrait to inject services
+- [x] Test ContainerLoader and add ContainerTrait to inject services
 - [ ] Extend Command
 
 ### Needed extension in the future:
 - [ ] Session
-- [ ] Cache
+- [x] Cache
