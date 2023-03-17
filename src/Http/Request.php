@@ -63,9 +63,9 @@ class Request
         }
     }
 
-    public function logRequest(LoggerInterface $logger): void
+    public function logRequest(?LoggerInterface $logger): void
     {
-        $logger->info(
+        $logger?->info(
             sprintf('Requested path: %s, with %s method from ip: %s',
                 $this->path, $this->method, $this->ip)
         );
