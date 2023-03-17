@@ -141,6 +141,7 @@ class Kernel
             foreach (self::PROPERTIES_TO_CACHE as $property => $cacheName) {
                 $cacheItem = $this->kernelCache->getItem($cacheName);
                 $cacheItem->set($this->$property);
+                $this->kernelCache->save($cacheItem);
             }
         }
     }
