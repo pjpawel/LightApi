@@ -4,6 +4,7 @@ namespace pjpawel\LightApi\Component;
 
 use Exception;
 
+/** @deprecated  */
 class Serializer
 {
 
