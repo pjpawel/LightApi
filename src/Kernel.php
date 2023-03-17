@@ -37,6 +37,7 @@ class Kernel
     public string $projectDir;
     public string $env;
     public bool $debug;
+    private bool $makeCacheOnDestruct = true;
     private Router $router;
     private CommandsLoader $commandLoader;
     private ContainerLoader $containerLoader;
@@ -70,6 +71,7 @@ class Kernel
                 }
                 $this->$property = $routerItem->get();
             }
+            $this->makeCacheOnDestruct = false;
         }
         if (!$loaded) {
             $classWalker = new ClassWalker($config['services'] ?? $this->projectDir);
@@ -137,7 +139,7 @@ class Kernel
     public function __destruct()
     {
         $this->eventHandler->tryTriggering(EventHandler::KERNEL_ON_DESTRUCT);
-        if (!$this->debug) {
+        if (!$this->debug && $this->makeCacheOnDestruct) {
             foreach (self::PROPERTIES_TO_CACHE as $property => $cacheName) {
                 $cacheItem = $this->kernelCache->getItem($cacheName);
                 $cacheItem->set($this->$property);
